@@ -46,6 +46,10 @@ end
 
 % --- Executes just before PongTool is made visible.
 function PongTool_OpeningFcn(hObject, eventdata, handles, varargin)
+global startingPosition;
+startingPosition.left = [2, 5];
+startingPosition.right = [10, 5];
+Test();
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
