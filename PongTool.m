@@ -48,13 +48,22 @@ end
 function PongTool_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
+handles.easy = 0;
+handles.medium = 1;
+handles.hard = 2;
+handles.insane = 3;
+
+handles.conservative = 0;
+handles.balanced = 1;
+handles.aggressive = 2;
+handles.beserk = 3;
+
+configureAxes(handles);
 % Update handles structure
 guidata(hObject, handles);
 
 % UIWAIT makes PongTool wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
-configureAxes(handles)
-
 
 % --- Outputs from this function are returned to the command line.
 function varargout = PongTool_OutputFcn(hObject, eventdata, handles) 
