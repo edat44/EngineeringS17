@@ -1,5 +1,5 @@
 function paddle = createPaddle(difficulty, strategy, xPos, yPos, width, height)
-paddle = struct([]);
+paddle = struct();
 position = struct('x', xPos, 'y', yPos);
 size = struct('width', width, 'height', height);
 
