@@ -53,6 +53,7 @@ guidata(hObject, handles);
 
 % UIWAIT makes PongTool wait for user response (see UIRESUME)
 % uiwait(handles.figure1);
+configureAxes(handles)
 
 
 % --- Outputs from this function are returned to the command line.
