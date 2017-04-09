@@ -1,5 +1,7 @@
 function StartGame(handles)
 
+%% Set up Game axes
+
 %% Create both players with correct difficulty and strategy
 rPaddle = createPaddle(handles.easy, handles.balanced, handles.rightPlayerOffset, 0, .2, 1);
 lPaddle = createPaddle(handles.easy, handles.balanced, handles.leftPlayerOffset, 0, .2, 1);
