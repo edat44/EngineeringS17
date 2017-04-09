@@ -7,7 +7,7 @@ function StartGame(handles)
 %% Create ball(s)
 
 %% Start simulation
-while true
+while false
 
 end
 
