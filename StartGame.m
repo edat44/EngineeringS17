@@ -3,21 +3,28 @@ function StartGame(handles)
 %% Set up Game axes
 
 %% Create both players with correct difficulty and strategy
-rPaddle = createPaddle(handles.easy, handles.balanced, handles.rightPlayerOffset, 0, .2, 1);
-lPaddle = createPaddle(handles.easy, handles.balanced, handles.leftPlayerOffset, 0, .2, 1);
-pixel = imread('whitePixel.png');
-
-paddleData = {rPaddle, lPaddle};
-rImage = image('Cdata', pixel);
-rImage.Parent = handles.gameplot;
-rImage.XData = [rPaddle.position.x - rPaddle.width/2, rPaddle.position.x + rPaddle.width/2];
-rImage.YData = [rPaddle.position.y - rPaddle.height/2, rPaddle.position.y + rPaddle.height/2];
-drawnow();
+paddleData = {  createPaddle(handles.easy, handles.balanced, handles.rightPlayerOffset, 0, .2, 1),...
+                createPaddle(handles.easy, handles.balanced, handles.leftPlayerOffset, 0, .2, 1)};
+for i=1:length(paddleData)
+    paddle = paddleData{i};
+    paddle.image = image('CData', imread('whitePixel.png'));
+    paddle.image.Parent = handles.gameplot;
+    paddleData{i} = paddle;
+end
 %% Create ball(s)
 
 %% Start simulation
-while false
+disp('Simulation beginning...');
 
+while handles.runSimulationCheckbox.Value
+    for i=1:length(paddleData)
+        paddle = paddleData{i};
+        paddle.image.XData = [paddle.position.x - paddle.width/2, paddle.position.x + paddle.width/2];
+        paddle.image.YData = [paddle.position.y - paddle.height/2, paddle.position.y + paddle.height/2];
+        paddleData{i} = paddle;
+    end
+    pause(.001);
 end
+disp('Simulation terminated');
 
 %% Report game statistics

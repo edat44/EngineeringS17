@@ -7,4 +7,3 @@ paddle.strategy = strategy;
 paddle.position = position;
 paddle.width = width;
 paddle.height = height;
-paddle.color = [1, 1, 1];
