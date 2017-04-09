@@ -58,6 +58,9 @@ handles.balanced = 1;
 handles.aggressive = 2;
 handles.beserk = 3;
 
+handles.rightPlayerOffset = 4.5;
+handles.leftPlayerOffset = -handles.rightPlayerOffset;
+
 configureAxes(handles);
 % Update handles structure
 guidata(hObject, handles);
