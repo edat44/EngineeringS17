@@ -58,6 +58,9 @@ handles.balanced = 1;
 handles.aggressive = 2;
 handles.beserk = 3;
 
+handles.rightPlayerOffset = 4.5;
+handles.leftPlayerOffset = -handles.rightPlayerOffset;
+
 configureAxes(handles);
 % Update handles structure
 guidata(hObject, handles);
@@ -81,4 +84,4 @@ function startButton_Callback(hObject, eventdata, handles)
 % hObject    handle to startButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-StartGame(handles);
+startGame(handles);
