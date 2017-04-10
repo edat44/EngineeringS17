@@ -58,16 +58,19 @@ handles.balanced = 1;
 handles.aggressive = 2;
 handles.beserk = 3;
 
-handles.leftOffset = -90;
-handles.rightOffset = 90;
+handles.leftOffset = -180;
+handles.rightOffset = -handles.leftOffset;
 
 handles.paddleWidth = 1.5;
 handles.paddleHeight = 15;
-handles.ballSize = 5;
+handles.ballSize = 3;
 
-handles.quarterSize = [100, 100];
+handles.quarterSize = [200, 125];
 
 handles.gameRunning = false;
+
+handles.fps = 50;
+handles.frameDelay = 1/handles.fps;
 
 configureAxes(handles);
 % Update handles structure

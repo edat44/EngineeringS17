@@ -7,7 +7,7 @@ function StartGame(handles)
 paddleData = {  Paddle(handles, handles.easy, handles.balanced, handles.rightOffset),...
                 Paddle(handles, handles.easy, handles.balanced, handles.leftOffset)};
 %% Create ball(s)
-%balls = {(0, 0, 5)};
+balls = {Ball(handles)};
 
 %% Start simulation
 disp('Simulation beginning...');
@@ -16,10 +16,16 @@ try
     handles.gameRunning = true;
     guidata(gcf, handles);
     while handles.runSimulationCheckbox.Value
+        tic;
         for i=1:length(paddleData)
             updateImage(paddleData{i});
         end
-        drawnow();
+        timeElapsed = toc;
+        if timeElapsed > handles.frameDelay
+            fprintf('WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\ttime elapsed = %d\n\tframe delay = %d\n', timeElapsed, handles.frameDelay);
+        end
+        disp(handles.frameDelay-timeElapsed);
+        pause(max(handles.frameDelay-timeElapsed, 0));
     end
 catch
     terminated = true;
