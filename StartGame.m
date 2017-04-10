@@ -4,8 +4,11 @@ function StartGame(handles)
 %configureAxes(handles);
 
 %% Create both players with correct difficulty and strategy
-paddleData = {  Paddle(handles, handles.easy, handles.balanced, handles.rightOffset),...
-                Paddle(handles, handles.easy, handles.balanced, handles.leftOffset)};
+paddleData = {  Paddle(handles, handles.easy, handles.balanced, handles.leftOffset, -handles.scoreTextX),...
+                Paddle(handles, handles.easy, handles.balanced, handles.rightOffset, handles.scoreTextX)};
+            
+leftPlayer = 1;
+rightPlayer = 2;
 %% Create ball(s)
 balls = {Ball(handles)};
 
@@ -19,6 +22,7 @@ try
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
         for i=1:length(paddleData)
+            paddleData{i}.UpdateScoreDisplay;
             UpdateImage(paddleData{i});
         end
         
@@ -30,15 +34,26 @@ try
         %% Finish out loop
         timeElapsed = toc;
         if timeElapsed > handles.frameDelay
-            fprintf('WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\ttime elapsed = %d\n\tframe delay = %d\n', timeElapsed, handles.frameDelay);
+            fprintf(['WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\t',...
+                'time elapsed = %d\n\t',...
+                'frame delay = %d\n\t',...
+                'left over time = %d\n'],...
+                timeElapsed, handles.frameDelay, handles.frameDelay-timeElapsed);
         end
-        disp(handles.frameDelay-timeElapsed);
+        
         pause(max(handles.frameDelay-timeElapsed, 0));
     end
 catch ERR
     fprintf('ERROR: %s\n\t%s\n', ERR.identifier, ERR.message);
     terminated = true;
     disp('Simulation terminated abruptly');
+end
+
+for i=1:length(paddleData)
+    delete(paddleData{i});
+end
+for i=1:length(balls)
+    delete(balls{i});
 end
 
 if ~terminated

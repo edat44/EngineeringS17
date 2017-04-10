@@ -26,6 +26,10 @@ classdef Entity < handle
             obj.img.XData = [obj.position.x - obj.width/2, obj.position.x + obj.width/2];
             obj.img.YData = [obj.position.y - obj.height/2, obj.position.y + obj.height/2];
         end
+        
+        function delete(obj)
+            delete(obj.img);
+        end
     end
     
 end

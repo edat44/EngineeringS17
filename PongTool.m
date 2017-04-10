@@ -61,11 +61,14 @@ handles.beserk = 3;
 handles.leftOffset = -180;
 handles.rightOffset = -handles.leftOffset;
 
+handles.scoreTextY = 100;
+handles.scoreTextX = 110;
+
 handles.paddleWidth = 1.5;
 handles.paddleHeight = 15;
 handles.ballSize = 3;
 
-handles.quarterSize = [200, 125];
+handles.quarterSize = struct('width', 200, 'height', 125);
 
 handles.gameRunning = false;
 
