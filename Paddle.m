@@ -22,6 +22,7 @@ classdef Paddle < Entity
         
         function UpdateScoreDisplay(obj)
             obj.scoreText.String = num2str(obj.score);
+            %Extent(3) gives the width of the text object
             obj.scoreText.Position = [obj.scoreTextPosition.x - obj.scoreText.Extent(3)/2, obj.scoreTextPosition.y];
         end
         

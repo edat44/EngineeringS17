@@ -1,4 +1,4 @@
-classdef Entity < handle
+classdef (Abstract) Entity < handle
     %Entity
     
     properties
@@ -23,8 +23,16 @@ classdef Entity < handle
         end
         
         function UpdateImage(obj)
-            obj.img.XData = [obj.position.x - obj.width/2, obj.position.x + obj.width/2];
-            obj.img.YData = [obj.position.y - obj.height/2, obj.position.y + obj.height/2];
+            borders = obj.Borders();
+            obj.img.XData = [borders.left, borders.right];
+            obj.img.YData = [borders.bottom, borders.top];
+        end
+        
+        function data = Borders(obj)
+            data.left = obj.position.x - obj.width/2;
+            data.right = obj.position.x + obj.width/2;
+            data.bottom = obj.position.y - obj.height/2;
+            data.top = obj.position.y + obj.height/2;
         end
         
         function delete(obj)

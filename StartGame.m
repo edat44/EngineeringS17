@@ -4,7 +4,7 @@ function StartGame(handles)
 %configureAxes(handles);
 
 %% Create both players with correct difficulty and strategy
-paddleData = {  Paddle(handles, handles.easy, handles.balanced, handles.leftOffset, -handles.scoreTextX),...
+paddles = {  Paddle(handles, handles.easy, handles.balanced, handles.leftOffset, -handles.scoreTextX),...
                 Paddle(handles, handles.easy, handles.balanced, handles.rightOffset, handles.scoreTextX)};
             
 leftPlayer = 1;
@@ -21,16 +21,24 @@ try
     while handles.runSimulationCheckbox.Value
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
-        for i=1:length(paddleData)
-            paddleData{i}.UpdateScoreDisplay;
-            UpdateImage(paddleData{i});
+        for iPaddle=1:length(paddles)
+            %Update position
+           
+            %Update displays
+            paddles{iPaddle}.UpdateScoreDisplay;
+            paddles{iPaddle}.UpdateImage();
         end
         
         %% Update Balls
-        for i=1:length(balls)
-            UpdatePosition(balls{i});
-            UpdateImage(balls{i});
+        for iBall=1:length(balls)
+            balls{iBall}.UpdatePosition();
+            %Check for collisions
+            
+            %Update physical image of the ball
+            balls{iBall}.UpdateImage();
         end
+        
+        
         %% Finish out loop
         timeElapsed = toc;
         if timeElapsed > handles.frameDelay
@@ -49,11 +57,12 @@ catch ERR
     disp('Simulation terminated abruptly');
 end
 
-for i=1:length(paddleData)
-    delete(paddleData{i});
+%% Delete game objects
+for iPaddle=1:length(paddles)
+    delete(paddles{iPaddle});
 end
-for i=1:length(balls)
-    delete(balls{i});
+for iPaddle=1:length(balls)
+    delete(balls{iPaddle});
 end
 
 if ~terminated

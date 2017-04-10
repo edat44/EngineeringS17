@@ -22,7 +22,7 @@ function varargout = PongTool(varargin)
 
 % Edit the above text to modify the response to help PongTool
 
-% Last Modified by GUIDE v2.5 08-Apr-2017 22:51:13
+% Last Modified by GUIDE v2.5 09-Apr-2017 23:43:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -84,10 +84,6 @@ guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = PongTool_OutputFcn(hObject, eventdata, handles) 
-% varargout  cell array for returning output args (see VARARGOUT);
-% hObject    handle to figure
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
 varargout{1} = handles.output;
@@ -103,3 +99,13 @@ if ~handles.gameRunning
 else
     disp('Sorry, game already running');
 end
+
+
+% --- Executes on key press with focus on figure1 and none of its controls.
+function figure1_KeyPressFcn(hObject, eventdata, handles)
+% hObject    handle to figure1 (see GCBO)
+% eventdata  structure with the following fields (see MATLAB.UI.FIGURE)
+%	Key: name of the key that was pressed, in lower case
+%	Character: character interpretation of the key(s) that was pressed
+%	Modifier: name(s) of the modifier key(s) (i.e., control, shift) pressed
+% handles    structure with handles and user data (see GUIDATA)
