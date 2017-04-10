@@ -22,6 +22,12 @@ classdef (Abstract) Entity < handle
             obj.UpdateImage();
         end
         
+        function SetPosition(obj, x, y)
+            obj.position.x = x;
+            obj.position.y = y;
+            obj.UpdateImage();
+        end
+        
         function UpdateImage(obj)
             borders = obj.Borders();
             obj.img.XData = [borders.left, borders.right];
@@ -33,6 +39,13 @@ classdef (Abstract) Entity < handle
             data.right = obj.position.x + obj.width/2;
             data.bottom = obj.position.y - obj.height/2;
             data.top = obj.position.y + obj.height/2;
+        end
+        
+        function collided = hasCollided(obj, test)
+            objB = obj.Borders();
+            testB = test.Borders();
+            collided = (testB.left < objB.right) && (testB.right > objB.left) &&...
+                       (testB.bottom < objB.top) && (testB.top > objB.bottom);
         end
         
         function delete(obj)

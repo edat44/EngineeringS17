@@ -4,8 +4,8 @@ function StartGame(handles)
 %configureAxes(handles);
 
 %% Create both players with correct difficulty and strategy
-paddles = {  Paddle(handles, handles.easy, handles.balanced, handles.leftOffset, -handles.scoreTextX),...
-                Paddle(handles, handles.easy, handles.balanced, handles.rightOffset, handles.scoreTextX)};
+paddles = {  Paddle(handles, handles.dif1popup.Value, handles.strat1popup.Value, handles.leftOffset, -handles.scoreTextX),...
+                Paddle(handles, handles.dif2popup.Value, handles.strat2popup.Value, handles.rightOffset, handles.scoreTextX)};
             
 leftPlayer = 1;
 rightPlayer = 2;
@@ -31,11 +31,20 @@ try
         
         %% Update Balls
         for iBall=1:length(balls)
-            balls{iBall}.UpdatePosition();
+            ball = balls{iBall};
+            %Initial ball movement
+            ball.UpdatePosition();
             %Check for collisions
-            
-            %Update physical image of the ball
-            balls{iBall}.UpdateImage();
+            borders = ball.Borders();
+            if borders.left < -handles.quarterSize.width
+                paddles{leftPlayer}.Score();
+                delete(ball);
+                balls(iBall) = [];
+            elseif borders.right > handles.quarterSize.width
+                paddles{rightPlayer}.Score();
+                delete(ball);
+                balls(iBall) = [];
+            end
         end
         
         

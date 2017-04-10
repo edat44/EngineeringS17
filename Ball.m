@@ -8,7 +8,7 @@ classdef Ball < Entity
     methods
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
-            obj.velocity = struct('x', 0, 'y', 100);
+            obj.velocity = struct('x', 100, 'y', 10);
             disp(obj.velocity.x);
         end
         
@@ -24,6 +24,7 @@ classdef Ball < Entity
                     obj.position.y = -yLimit;
                 end
             end
+            obj.UpdateImage();
         end
         
         function delete(obj)

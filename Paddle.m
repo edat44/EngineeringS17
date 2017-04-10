@@ -26,6 +26,10 @@ classdef Paddle < Entity
             obj.scoreText.Position = [obj.scoreTextPosition.x - obj.scoreText.Extent(3)/2, obj.scoreTextPosition.y];
         end
         
+        function Score(obj)
+            obj.score = obj.score + 1;
+        end
+        
         function delete(obj)
             delete@Entity(obj);
             delete(obj.scoreText);
