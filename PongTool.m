@@ -69,7 +69,7 @@ handles.quarterSize = [200, 125];
 
 handles.gameRunning = false;
 
-handles.fps = 50;
+handles.fps = 100;
 handles.frameDelay = 1/handles.fps;
 
 configureAxes(handles);

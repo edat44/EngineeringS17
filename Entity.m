@@ -1,7 +1,8 @@
-classdef Entity
+classdef Entity < handle
     %Entity
     
     properties
+        handles
         position
         width
         height
@@ -10,6 +11,7 @@ classdef Entity
     
     methods
         function obj = Entity(handles, posX, posY, width, height)
+            obj.handles = handles;
             obj.position = struct('x', posX, 'y', posY);
             obj.width = width;
             obj.height = height;
@@ -17,10 +19,10 @@ classdef Entity
                 cData(1, 1, i) = 1;
             end
             obj.img = image('CData', cData, 'Parent', handles.gameplot);
-            obj.updateImage();
+            obj.UpdateImage();
         end
         
-        function updateImage(obj)
+        function UpdateImage(obj)
             obj.img.XData = [obj.position.x - obj.width/2, obj.position.x + obj.width/2];
             obj.img.YData = [obj.position.y - obj.height/2, obj.position.y + obj.height/2];
         end

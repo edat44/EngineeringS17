@@ -16,10 +16,18 @@ try
     handles.gameRunning = true;
     guidata(gcf, handles);
     while handles.runSimulationCheckbox.Value
-        tic;
+        tic; %starts timer to check how long loop iteration takes
+        %% Update Paddles
         for i=1:length(paddleData)
-            updateImage(paddleData{i});
+            UpdateImage(paddleData{i});
         end
+        
+        %% Update Balls
+        for i=1:length(balls)
+            UpdatePosition(balls{i});
+            UpdateImage(balls{i});
+        end
+        %% Finish out loop
         timeElapsed = toc;
         if timeElapsed > handles.frameDelay
             fprintf('WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\ttime elapsed = %d\n\tframe delay = %d\n', timeElapsed, handles.frameDelay);
@@ -27,7 +35,8 @@ try
         disp(handles.frameDelay-timeElapsed);
         pause(max(handles.frameDelay-timeElapsed, 0));
     end
-catch
+catch ERR
+    fprintf('ERROR: %s\n\t%s\n', ERR.identifier, ERR.message);
     terminated = true;
     disp('Simulation terminated abruptly');
 end
