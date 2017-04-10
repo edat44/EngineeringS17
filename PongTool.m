@@ -58,8 +58,16 @@ handles.balanced = 1;
 handles.aggressive = 2;
 handles.beserk = 3;
 
-handles.rightPlayerOffset = 4.5;
-handles.leftPlayerOffset = -handles.rightPlayerOffset;
+handles.leftOffset = -90;
+handles.rightOffset = 90;
+
+handles.paddleWidth = 1.5;
+handles.paddleHeight = 15;
+handles.ballSize = 5;
+
+handles.quarterSize = [100, 100];
+
+handles.gameRunning = false;
 
 configureAxes(handles);
 % Update handles structure
@@ -84,5 +92,8 @@ function startButton_Callback(hObject, eventdata, handles)
 % hObject    handle to startButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-StartGame(handles);
-createBall(0, 0, 1);
+if ~handles.gameRunning
+    StartGame(handles);
+else
+    disp('Sorry, game already running');
+end
