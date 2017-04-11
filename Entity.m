@@ -49,9 +49,10 @@ classdef (Abstract) Entity < handle
         function pos = GetPosition(obj)
             pos = obj.position;
         end
-        
+    
         function delete(obj)
             delete(obj.rect);
+            delete@handle(obj);
         end
     end
     

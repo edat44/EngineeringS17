@@ -18,7 +18,7 @@ terminated = false;
 try
     handles.gameRunning = true;
     guidata(gcf, handles);
-    while handles.runSimulationCheckbox.Value && length(balls) > 0
+    while handles.runSimulationCheckbox.Value && length(balls)
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
         for iPaddle=1:length(paddles)
@@ -52,6 +52,7 @@ try
             end
             
             %Check if ball has been scored
+            ballBorders = ball.Borders();
             if ballBorders.left < -handles.quarterSize.width
                 paddles{leftPlayer}.Score();
                 delete(ball);
@@ -87,19 +88,19 @@ catch ERR
 end
 
 %% Delete game objects
-for iPaddle=length(paddles):-1:1
-    delete(paddles{iPaddle});
-    paddles(iPaddle) = [];
-end
-
 for iBall=length(balls):-1:1
     delete(balls{iBall});
     balls(iBall) = [];
 end
 
+for iPaddle=length(paddles):-1:1
+    delete(paddles{iPaddle});
+    paddles(iPaddle) = [];
+end
+
 if ~terminated
     handles.gameRunning = false;
-    guidata(gcf, handles);
+    %guidata(gcf, handles);
     disp('Simulation finished');
     
     

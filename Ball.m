@@ -8,7 +8,7 @@ classdef Ball < Entity
     methods
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
-            obj.velocity = struct('x', randi([90, 600]), 'y', randi([8, 12]));
+            obj.velocity = struct('x', randi([90, 600]), 'y', randi([12, 20]));
         end
         
         function UpdatePosition(obj)
