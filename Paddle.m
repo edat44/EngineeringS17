@@ -7,6 +7,7 @@ classdef Paddle < Entity
         score
         scoreText
         scoreTextPosition
+        baseSpeed
     end
     
     methods
@@ -15,8 +16,14 @@ classdef Paddle < Entity
             obj.scoreTextPosition = struct('x', scoreTextX, 'y', handles.scoreTextY);
             obj.difficulty = difficulty;
             obj.strategy = strategy;
+            obj.baseSpeed = handles.paddleSpeed / handles.fps;
             obj.score = randi([0, 150]);
             obj.scoreText = text('Parent', handles.gameplot, 'Color', 'w', 'FontSize', 36);
+            obj.UpdateScoreDisplay();
+        end
+        
+        function Update(obj, ball)
+            obj.UpdatePosition(ball);
             obj.UpdateScoreDisplay();
         end
         
@@ -24,6 +31,16 @@ classdef Paddle < Entity
             obj.scoreText.String = num2str(obj.score);
             %Extent(3) gives the width of the text object
             obj.scoreText.Position = [obj.scoreTextPosition.x - obj.scoreText.Extent(3)/2, obj.scoreTextPosition.y];
+        end
+        
+        function UpdatePosition(obj, ball)
+            y = obj.position.y;
+            if ball.position.y > obj.position.y
+                y = y + obj.baseSpeed;
+            elseif ball.position.y < obj.position.y
+                y = y - obj.baseSpeed;
+            end
+            obj.SetPosition(obj.position.x, y);
         end
         
         function Score(obj)

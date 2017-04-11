@@ -18,32 +18,50 @@ terminated = false;
 try
     handles.gameRunning = true;
     guidata(gcf, handles);
-    while handles.runSimulationCheckbox.Value
+    while handles.runSimulationCheckbox.Value && length(balls) > 0
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
         for iPaddle=1:length(paddles)
-            %Update position
-           
-            %Update displays
-            paddles{iPaddle}.UpdateScoreDisplay;
-            paddles{iPaddle}.UpdateImage();
+            %Update paddle
+            paddles{iPaddle}.Update(balls{1});
         end
         
         %% Update Balls
-        for iBall=1:length(balls)
+        for iBall=length(balls):-1:1
             ball = balls{iBall};
-            %Initial ball movement
+            %Update ball initially
             ball.UpdatePosition();
-            %Check for collisions
-            borders = ball.Borders();
-            if borders.left < -handles.quarterSize.width
+            
+            ballBorders = ball.Borders();
+            
+            %Check for paddle and ball collisions
+            leftPaddleBorders = paddles{leftPlayer}.Borders();
+            if ballBorders.bottom <= leftPaddleBorders.top && ballBorders.top >= leftPaddleBorders.bottom &&...
+                    ballBorders.left <= leftPaddleBorders.right && ball.LastBorders().left > leftPaddleBorders.right
+        
+                ball.SetXVelocityDirection(1);
+                ball.SetX(leftPaddleBorders.right + ballBorders.width/2);
+            end
+           
+            rightPaddleBorders = paddles{rightPlayer}.Borders();
+            if ballBorders.bottom <= rightPaddleBorders.top && ballBorders.top >= rightPaddleBorders.bottom &&...
+                    ballBorders.right >= rightPaddleBorders.left && ball.LastBorders().right < rightPaddleBorders.left
+               
+                ball.SetXVelocityDirection(-1);
+                ball.SetX(rightPaddleBorders.left - ballBorders.width/2);
+            end
+            
+            %Check if ball has been scored
+            if ballBorders.left < -handles.quarterSize.width
                 paddles{leftPlayer}.Score();
                 delete(ball);
                 balls(iBall) = [];
-            elseif borders.right > handles.quarterSize.width
+                continue;
+            elseif ballBorders.right > handles.quarterSize.width
                 paddles{rightPlayer}.Score();
                 delete(ball);
                 balls(iBall) = [];
+                continue;
             end
         end
         
@@ -62,16 +80,21 @@ try
     end
 catch ERR
     fprintf('ERROR: %s\n\t%s\n', ERR.identifier, ERR.message);
+    disp(ERR);
+    disp(ERR.stack(1));
     terminated = true;
     disp('Simulation terminated abruptly');
 end
 
 %% Delete game objects
-for iPaddle=1:length(paddles)
+for iPaddle=length(paddles):-1:1
     delete(paddles{iPaddle});
+    paddles(iPaddle) = [];
 end
-for iPaddle=1:length(balls)
-    delete(balls{iPaddle});
+
+for iBall=length(balls):-1:1
+    delete(balls{iBall});
+    balls(iBall) = [];
 end
 
 if ~terminated

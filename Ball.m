@@ -8,23 +8,29 @@ classdef Ball < Entity
     methods
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
-            obj.velocity = struct('x', 100, 'y', 10);
-            disp(obj.velocity.x);
+            obj.velocity = struct('x', 1000, 'y', randi([10, 10]));
         end
         
         function UpdatePosition(obj)
-            obj.position.x = obj.position.x + (obj.velocity.x / obj.handles.fps);
-            obj.position.y = obj.position.y + (obj.velocity.y / obj.handles.fps);
+            x = obj.position.x + (obj.velocity.x / obj.handles.fps);
+            y = obj.position.y + (obj.velocity.y / obj.handles.fps);
             yLimit = obj.handles.quarterSize.height - obj.height/2;
-            if abs(obj.position.y) > yLimit
+            if abs(y) > yLimit
                 obj.velocity.y = -obj.velocity.y;
-                if obj.position.y > 0
-                    obj.position.y = yLimit;
-                else
-                    obj.position.y = -yLimit;
-                end
             end
-            obj.UpdateImage();
+            obj.SetPosition(x, y);
+        end
+        
+        function SetX(obj, x)
+            obj.SetPosition(x, obj.position.y);
+        end
+        
+        function vel = GetVelocity(obj)
+            vel = obj.velocity;
+        end
+               
+        function SetXVelocityDirection(obj, direction)
+            obj.velocity.x = abs(obj.velocity.x) * sign(direction);
         end
         
         function delete(obj)

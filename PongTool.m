@@ -64,9 +64,11 @@ handles.rightOffset = -handles.leftOffset;
 handles.scoreTextY = 100;
 handles.scoreTextX = 110;
 
-handles.paddleWidth = 1.5;
-handles.paddleHeight = 15;
-handles.ballSize = 3;
+handles.paddleWidth = 10;
+handles.paddleHeight = 60;
+handles.ballSize = 8;
+
+handles.paddleSpeed = 10;
 
 handles.quarterSize = struct('width', 200, 'height', 125);
 
@@ -76,6 +78,7 @@ handles.fps = 100;
 handles.frameDelay = 1/handles.fps;
 
 configureAxes(handles);
+
 % Update handles structure
 guidata(hObject, handles);
 
