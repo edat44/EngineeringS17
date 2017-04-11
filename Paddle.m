@@ -17,7 +17,7 @@ classdef Paddle < Entity
             obj.difficulty = difficulty;
             obj.strategy = strategy;
             obj.baseSpeed = handles.paddleSpeed / handles.fps;
-            obj.score = randi([0, 150]);
+            obj.score = 0;
             obj.scoreText = text('Parent', handles.gameplot, 'Color', 'w', 'FontSize', 36);
             obj.UpdateScoreDisplay();
         end
