@@ -48,15 +48,15 @@ end
 function PongTool_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
-handles.easy = 0;
-handles.medium = 1;
-handles.hard = 2;
-handles.insane = 3;
+handles.easy = 1;
+handles.medium = 2;
+handles.hard = 3;
+handles.insane = 4;
 
-handles.conservative = 0;
-handles.balanced = 1;
-handles.aggressive = 2;
-handles.beserk = 3;
+handles.conservative = 1;
+handles.balanced = 2;
+handles.aggressive = 3;
+handles.beserk = 4;
 
 handles.leftOffset = -180;
 handles.rightOffset = -handles.leftOffset;

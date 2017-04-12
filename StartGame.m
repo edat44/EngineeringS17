@@ -1,8 +1,5 @@
 function StartGame(handles)
 
-%% Set up Game axes
-%configureAxes(handles);
-
 %% Create both players with correct difficulty and strategy
 paddles = {  Paddle(handles, handles.dif1popup.Value, handles.strat1popup.Value, handles.leftOffset, -handles.scoreTextX),...
                 Paddle(handles, handles.dif2popup.Value, handles.strat2popup.Value, handles.rightOffset, handles.scoreTextX)};

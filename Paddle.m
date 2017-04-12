@@ -35,6 +35,10 @@ classdef Paddle < Entity
         
         function UpdatePosition(obj, ball)
             y = obj.position.y;
+            switch obj.difficulty
+                case obj.handles.easy
+                    disp('Easy');
+            end
             if ball.position.y > obj.position.y
                 y = y + obj.baseSpeed;
             elseif ball.position.y < obj.position.y
