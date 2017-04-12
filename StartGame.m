@@ -100,7 +100,7 @@ end
 
 if ~terminated
     handles.gameRunning = false;
-    %guidata(gcf, handles);
+    guidata(gcf, handles);
     disp('Simulation finished');
     
     
