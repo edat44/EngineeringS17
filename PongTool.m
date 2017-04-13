@@ -68,7 +68,7 @@ handles.paddleWidth = 10;
 handles.paddleHeight = 60;
 handles.ballSize = 8;
 
-handles.paddleSpeed = 10;
+handles.paddleSpeed = 100;
 
 handles.quarterSize = struct('width', 200, 'height', 125);
 

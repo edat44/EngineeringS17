@@ -64,7 +64,7 @@ classdef (Abstract) Entity < handle
             if obj.Borders().top > obj.handles.quarterSize.height
                 obj.position.y = obj.handles.quarterSize.height - obj.height/2;
             elseif obj.Borders().bottom < -obj.handles.quarterSize.height
-                obj.position.y = obj.handles.quarterSize.height + obj.height/2;
+                obj.position.y = -(obj.handles.quarterSize.height - obj.height/2);
             else
                 obj.position.y = y;
             end

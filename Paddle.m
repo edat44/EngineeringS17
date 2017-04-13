@@ -24,7 +24,6 @@ classdef Paddle < Entity
         
         function Update(obj, ball)
             obj.UpdatePosition(ball);
-            obj.UpdateScoreDisplay();
         end
         
         function UpdateScoreDisplay(obj)
@@ -37,7 +36,7 @@ classdef Paddle < Entity
             y = obj.position.y;
             switch obj.difficulty
                 case obj.handles.easy
-                    disp('Easy');
+                    %disp('Easy');
             end
             if ball.position.y > obj.position.y
                 y = y + obj.baseSpeed;
@@ -49,6 +48,7 @@ classdef Paddle < Entity
         
         function Score(obj)
             obj.score = obj.score + 1;
+            obj.UpdateScoreDisplay();
         end
         
         function delete(obj)
