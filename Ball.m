@@ -13,8 +13,8 @@ classdef Ball < Entity
     methods
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
-            obj.velocity = struct('x', 10, 'y', 1.5);
-            obj.acceleration = 10;
+            obj.velocity = struct('x', (rand()*40)+20, 'y', (rand()*10)+2);
+            obj.acceleration = 5;
             obj.points = zeros(2,1);
             obj.pointPlotColor = [(rand()/2)+0.5, (rand()/2)+0.5, (rand()/2)+0.5];
             obj.pointPlotLength = 100;
@@ -55,7 +55,7 @@ classdef Ball < Entity
         function Bounce(obj, paddle, angleAdjustment)
             posDif = obj.position.y - paddle.GetPosition().y;
             newAngle = angleAdjustment*(posDif/(obj.handles.paddleHeight/2))*0.5;
-            obj.SetVelocityFromAngle(newAngle + obj.GetAngle());
+            %obj.SetVelocityFromAngle(newAngle + obj.GetAngle());
         end
         
         function mag = GetVelocityMagnitude(obj)

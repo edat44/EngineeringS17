@@ -37,11 +37,18 @@ classdef Paddle < Entity
             switch obj.difficulty
                 case obj.handles.easy
                     %disp('Easy');
+                case obj.handles.medium
+                    %disp('Medium');
+                case obj.handles.hard
+                    %disp('Hard');
+                case obj.handles.insane
+                    %disp('Insane');
             end
-            if ball.position.y > obj.position.y
-                y = y + obj.baseSpeed;
-            elseif ball.position.y < obj.position.y
-                y = y - obj.baseSpeed;
+            ballPos = ball.GetPosition();
+            if ballPos.y > obj.position.y
+                y = min(y + obj.baseSpeed, ballPos.y);
+            elseif ballPos.y < obj.position.y
+                y = max(y - obj.baseSpeed, ballPos.y);
             end
             obj.SetPosition(obj.position.x, y);
         end
