@@ -6,14 +6,18 @@ classdef Ball < Entity
         acceleration %scalar
         points
         pointPlot
+        pointPlotColor
+        pointPlotLength
     end
     
     methods
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
-            obj.velocity = struct('x', 10, 'y', randi([3, 10]));
+            obj.velocity = struct('x', 10, 'y', 1.5);
             obj.acceleration = 10;
             obj.points = zeros(2,1);
+            obj.pointPlotColor = [(rand()/2)+0.5, (rand()/2)+0.5, (rand()/2)+0.5];
+            obj.pointPlotLength = 100;
         end
         
         function UpdatePosition(obj)
@@ -35,15 +39,33 @@ classdef Ball < Entity
                 delete(obj.pointPlot);
             end
             hold('on');
-            startPoint = max(1, numPoints-500);
+            startPoint = max(1, numPoints-obj.pointPlotLength);
             endPoint = numPoints+1;
-            obj.pointPlot = plot(obj.points(1,startPoint:endPoint), obj.points(2, startPoint:endPoint), 'r.');
+            obj.pointPlot = plot(obj.points(1,startPoint:endPoint), obj.points(2, startPoint:endPoint));
+            obj.pointPlot.Color = obj.pointPlotColor;
+            obj.pointPlot.Marker = '.';
             obj.pointPlot.Parent = obj.handles.gameplot;
             hold('off');
         end
         
         function angle = GetAngle(obj)
             angle = abs(atan(obj.velocity.y/obj.velocity.x));
+        end
+        
+        function Bounce(obj, paddle, angleAdjustment)
+            posDif = obj.position.y - paddle.GetPosition().y;
+            newAngle = angleAdjustment*(posDif/(obj.handles.paddleHeight/2))*0.5;
+            obj.SetVelocityFromAngle(newAngle + obj.GetAngle());
+        end
+        
+        function mag = GetVelocityMagnitude(obj)
+            mag = sqrt(obj.velocity.x^2 + obj.velocity.y^2);
+        end
+        
+        function SetVelocityFromAngle(obj, angle)
+            currentMagnitude = obj.GetVelocityMagnitude();
+            obj.velocity.x = currentMagnitude*cos(angle);
+            obj.velocity.y = currentMagnitude*sin(angle);
         end
         
         function SetX(obj, x)

@@ -38,6 +38,7 @@ try
         
                 ball.SetXVelocityDirection(1);
                 ball.SetX(leftPaddleBorders.right + ballBorders.width/2);
+                ball.Bounce(paddles{leftPlayer}, 1);
             end
            
             rightPaddleBorders = paddles{rightPlayer}.Borders();
@@ -46,6 +47,7 @@ try
                
                 ball.SetXVelocityDirection(-1);
                 ball.SetX(rightPaddleBorders.left - ballBorders.width/2);
+                ball.Bounce(paddles{rightPlayer}, -1);
             end
             
             %Check if ball has been scored
