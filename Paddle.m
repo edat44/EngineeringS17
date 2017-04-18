@@ -2,7 +2,6 @@ classdef Paddle < Entity
     %Paddle: contains all info necessary
     
     properties (Access = public)
-        difficulty
         strategy
         score
         scoreText
@@ -11,10 +10,9 @@ classdef Paddle < Entity
     end
     
     methods
-        function obj = Paddle(handles, difficulty, strategy, xPos, scoreTextX)
+        function obj = Paddle(handles, strategy, xPos, scoreTextX)
             obj = obj@Entity(handles, xPos, 0, handles.paddleWidth, handles.paddleHeight);
             obj.scoreTextPosition = struct('x', scoreTextX, 'y', handles.scoreTextY);
-            obj.difficulty = difficulty;
             obj.strategy = strategy;
             obj.baseSpeed = handles.paddleSpeed / handles.fps;
             obj.score = 0;
@@ -34,15 +32,8 @@ classdef Paddle < Entity
         
         function UpdatePosition(obj, ball)
             y = obj.position.y;
-            switch obj.difficulty
-                case obj.handles.easy
-                    %disp('Easy');
-                case obj.handles.medium
-                    %disp('Medium');
-                case obj.handles.hard
-                    %disp('Hard');
-                case obj.handles.insane
-                    %disp('Insane');
+            switch obj.strategy
+                %PLACE PADDLE STRATEGIES HERE
             end
             ballPos = ball.GetPosition();
             if ballPos.y > obj.position.y

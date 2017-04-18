@@ -22,7 +22,7 @@ function varargout = PongTool(varargin)
 
 % Edit the above text to modify the response to help PongTool
 
-% Last Modified by GUIDE v2.5 09-Apr-2017 23:43:41
+% Last Modified by GUIDE v2.5 18-Apr-2017 15:23:56
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -48,15 +48,16 @@ end
 function PongTool_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
-handles.easy = 1;
-handles.medium = 2;
-handles.hard = 3;
-handles.insane = 4;
-
 handles.conservative = 1;
 handles.balanced = 2;
 handles.aggressive = 3;
-handles.beserk = 4;
+handles.berserk = 4;
+handles.strategies = {'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
+
+handles.singleBall = 1;
+handles.multiBall3 = 2;
+handles.multiBall5 = 3;
+handles.NumberofBalls = [1, 3, 5];
 
 handles.leftOffset = -180;
 handles.rightOffset = -handles.leftOffset;
@@ -104,3 +105,12 @@ if ~handles.gameRunning
 else
     disp('Sorry, game already running');
 end
+
+
+% --- Executes on button press in cancelSimulationButton.
+function cancelSimulationButton_Callback(hObject, eventdata, handles)
+% hObject    handle to cancelSimulationButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+handles.gameRunning = false;
+guidata(hObject, handles);

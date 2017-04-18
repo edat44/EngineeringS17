@@ -4,8 +4,8 @@ function StartGame(handles)
 rng('shuffle');
 
 %% Create both players with correct difficulty and strategy
-paddles = {  Paddle(handles, handles.dif1popup.Value, handles.strat1popup.Value, handles.leftOffset, -handles.scoreTextX),...
-                Paddle(handles, handles.dif2popup.Value, handles.strat2popup.Value, handles.rightOffset, handles.scoreTextX)};
+paddles = {  Paddle(handles, handles.strat1popup.Value, handles.leftOffset, -handles.scoreTextX),...
+                Paddle(handles, handles.strat2popup.Value, handles.rightOffset, handles.scoreTextX)};
             
 leftPlayer = 1;
 rightPlayer = 2;
@@ -20,7 +20,7 @@ terminated = false;
 try
     handles.gameRunning = true;
     guidata(gcf, handles);
-    while handles.runSimulationCheckbox.Value && length(balls)
+    while handles.gameRunning && length(balls)
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
         for iPaddle=1:length(paddles)
@@ -99,6 +99,7 @@ catch ERR
     disp(ERR.stack(1));
     terminated = true;
     disp('Simulation terminated abruptly');
+    handles.gameRunning = false;
 end
 
 %% Delete game objects
@@ -121,9 +122,11 @@ if ~terminated
     %% Report game statistics
     leftPlayerScore = paddles{leftPlayer}.score;
     rightPlayerScore = paddles{rightPlayer}.score;
-    X = ['Left' 'Right'];
+    X = {handles.strategies{paddles{leftPlayer}.strategy}, handles.strategies{paddles{rightPlayer}.strategy}};
     Y = [leftPlayerScore rightPlayerScore];
-    bar(handles.singleballAxes,X,Y)
+    disp(X);
+    bar(handles.singleballAxes,Y)
+    handles.singleballAxes.XTickLabel = X;
 end
 
 
