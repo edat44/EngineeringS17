@@ -13,7 +13,14 @@ classdef Ball < Entity
     methods
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
-            obj.velocity = struct('x', (rand()*80)+50, 'y', (rand()*50)+20);
+            obj.velocity = struct('x', (rand()*50)+80, 'y', 0);
+            angleRange = [pi/8, pi/3];
+            angle = rand()*(angleRange(2)-angleRange(1)+angleRangle(1);
+            horizontalSwitch = rand()*2;
+            if switchDirection < 1
+                angle = angle + pi;
+            end
+            obj.SetVelocityFromAngle(angle);
             obj.acceleration = 5;
             obj.points = zeros(2,1);
             obj.pointPlotColor = [(rand()/2)+0.5, (rand()/2)+0.5, (rand()/2)+0.5];

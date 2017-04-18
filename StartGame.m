@@ -107,10 +107,10 @@ for iBall=length(balls):-1:1
     balls(iBall) = [];
 end
 
-for iPaddle=length(paddles):-1:1
-    delete(paddles{iPaddle});
-    paddles(iPaddle) = [];
-end
+% for iPaddle=length(paddles):-1:1
+%     delete(paddles{iPaddle});
+%     paddles(iPaddle) = [];
+% end
 
 if ~terminated
     handles.gameRunning = false;
@@ -119,7 +119,7 @@ if ~terminated
     
     
     %% Report game statistics
-
+    
 end
 
 

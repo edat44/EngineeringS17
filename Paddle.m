@@ -58,6 +58,10 @@ classdef Paddle < Entity
             obj.UpdateScoreDisplay();
         end
         
+        function score = GetScore(obj)
+            score = obj.score;
+        end
+        
         function delete(obj)
             delete@Entity(obj);
             delete(obj.scoreText);
