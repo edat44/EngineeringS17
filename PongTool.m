@@ -77,7 +77,7 @@ handles.gameRunning = false;
 handles.fps = 100;
 handles.frameDelay = 1/handles.fps;
 
-handles.ballsPerSimulation = 5;
+handles.ballsPerSimulation = 2;
 
 configureAxes(handles);
 

@@ -14,10 +14,11 @@ classdef Ball < Entity
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
             obj.velocity = struct('x', (rand()*50)+80, 'y', 0);
-            angleRange = [pi/8, pi/3];
-            angle = rand()*(angleRange(2)-angleRange(1)+angleRangle(1);
+            angleRange = pi/4;
+            %angle = rand()*(angleRange(2)-angleRange(1)+angleRangle(1);
+            angle = (rand()*angleRange) - (angleRange/2);
             horizontalSwitch = rand()*2;
-            if switchDirection < 1
+            if horizontalSwitch < 1
                 angle = angle + pi;
             end
             obj.SetVelocityFromAngle(angle);

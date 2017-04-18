@@ -119,7 +119,9 @@ if ~terminated
     
     
     %% Report game statistics
-    
+    leftPlayerScore = paddles{leftPlayer}.score;
+    rightPlayerScore = paddles{rightPlayer}.score;
+    disp(leftPlayerScore);
 end
 
 

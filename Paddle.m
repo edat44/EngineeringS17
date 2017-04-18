@@ -1,7 +1,7 @@
 classdef Paddle < Entity
     %Paddle: contains all info necessary
     
-    properties
+    properties (Access = public)
         difficulty
         strategy
         score
@@ -56,10 +56,6 @@ classdef Paddle < Entity
         function Score(obj)
             obj.score = obj.score + 1;
             obj.UpdateScoreDisplay();
-        end
-        
-        function score = GetScore(obj)
-            score = obj.score;
         end
         
         function delete(obj)
