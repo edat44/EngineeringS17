@@ -13,7 +13,7 @@ classdef Ball < Entity
     methods
         function obj = Ball(handles)
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
-            obj.velocity = struct('x', (rand()*40)+20, 'y', (rand()*10)+2);
+            obj.velocity = struct('x', (rand()*80)+50, 'y', (rand()*50)+20);
             obj.acceleration = 5;
             obj.points = zeros(2,1);
             obj.pointPlotColor = [(rand()/2)+0.5, (rand()/2)+0.5, (rand()/2)+0.5];

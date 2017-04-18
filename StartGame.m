@@ -12,6 +12,8 @@ rightPlayer = 2;
 %% Create ball(s)
 balls = {Ball(handles)};
 
+ballsScored = 0;
+
 %% Start simulation
 disp('Simulation beginning...');
 terminated = false;
@@ -56,14 +58,24 @@ try
             %Check if ball has been scored
             ballBorders = ball.Borders();
             if ballBorders.left < -handles.quarterSize.width
-                paddles{leftPlayer}.Score();
-                delete(ball);
-                balls(iBall) = [];
-                continue;
-            elseif ballBorders.right > handles.quarterSize.width
                 paddles{rightPlayer}.Score();
                 delete(ball);
-                balls(iBall) = [];
+                ballsScored = ballsScored + 1;
+                if ballsScored < handles.ballsPerSimulation
+                    balls{iBall} = Ball(handles);
+                else
+                    balls(iBall) = [];
+                end
+                continue;
+            elseif ballBorders.right > handles.quarterSize.width
+                paddles{leftPlayer}.Score();
+                delete(ball);
+                ballsScored = ballsScored + 1;
+                if ballsScored < handles.ballsPerSimulation
+                    balls{iBall} = Ball(handles);
+                else
+                    balls(iBall) = [];
+                end
                 continue;
             end
         end
