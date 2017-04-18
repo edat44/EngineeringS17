@@ -121,7 +121,9 @@ if ~terminated
     %% Report game statistics
     leftPlayerScore = paddles{leftPlayer}.score;
     rightPlayerScore = paddles{rightPlayer}.score;
-    disp(leftPlayerScore);
+    X = ['Left' 'Right'];
+    Y = [leftPlayerScore rightPlayerScore];
+    bar(handles.singleballAxes,X,Y)
 end
 
 
