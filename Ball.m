@@ -31,7 +31,7 @@ classdef Ball < Entity
             obj.acceleration = 5;
             obj.points = zeros(2,1);
             obj.pointPlotColor = [(rand()/2)+0.5, (rand()/2)+0.5, (rand()/2)+0.5];
-            obj.pointPlotLength = 100;
+            obj.pointPlotLength = 50;
         end
         
         function UpdatePosition(obj)

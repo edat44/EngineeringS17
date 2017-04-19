@@ -103,8 +103,12 @@ function startButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 if ~handles.gameRunning
     clc;
+    disableControls(handles);
     cla(handles.analysisAxes,'reset')
     pointsPerSimulation = str2double(handles.pointsPerSimulationText.String);
+    ballsInPlay = handles.numberofBalls(handles.ballsInPlayPopup.Value);
+    realTime = handles.realTimeCheckbox.Value;
+    cpuStrategy = handles.strat1popup.Value;
     hwb = waitbar(0, 'Waiting...');
     hwb.NumberTitle = 'off';
     hwb.Name = 'Simulation Progress';
@@ -114,11 +118,11 @@ if ~handles.gameRunning
         wins = zeros(1, length(handles.strategies));
         for iStrategyNumber=1:totalSimulations
             wins(iStrategyNumber) = StartGame(handles,...
-                handles.strat1popup.Value,...
+                cpuStrategy,...
                 iStrategyNumber,...
                 pointsPerSimulation,...
-                handles.numberofBalls(handles.ballsInPlayPopup.Value),...
-                handles.realTimeCheckbox.Value,...
+                ballsInPlay,...
+                realTime,...
                 hwb,...
                 iStrategyNumber,...
                 totalSimulations);
@@ -136,11 +140,11 @@ if ~handles.gameRunning
     else
         strategyNumber = handles.strat2popup.Value;
         wins = StartGame(handles,...
-            handles.strat1popup.Value,...
+            cpuStrategy,...
             strategyNumber,...
             pointsPerSimulation,...
-            handles.numberofBalls(handles.ballsInPlayPopup.Value),...
-            handles.realTimeCheckbox.Value,...
+            ballsInPlay,...
+            realTime,...
             hwb,...
             strategyNumber,...
             1);
@@ -158,6 +162,7 @@ if ~handles.gameRunning
     if ishandle(hwb)
         close(hwb);
     end
+    enableControls(handles);
 else
     disp('Sorry, game already running');
 end
@@ -174,6 +179,7 @@ function cancelSimulation(handles)
 handles.gameRunning = false;
 disp('Cancelling simulation');
 guidata(gcbo, handles);
+enableControls(handles);
 
 % --- Executes on Callback of pointsPerSimulation
 function pointsPerSimulationText_Callback(hObject, eventdata, handles)
@@ -185,9 +191,6 @@ balls = max(min(balls, 10000), 1);
 hObject.String = balls;
 guidata(hObject, handles);
 
-
-
-
 % --- Executes on button press in runAllStrategiesCheckbox.
 function runAllStrategiesCheckbox_Callback(hObject, eventdata, handles)
 if hObject.Value
@@ -195,3 +198,27 @@ if hObject.Value
 else
     handles.strat2popup.Enable = 'on';
 end
+
+function disableControls(handles)
+handles.startButton.Enable = 'off';
+handles.strat1popup.Enable = 'off';
+handles.strat2popup.Enable = 'off';
+handles.ballsInPlayPopup.Enable = 'off';
+handles.pointsPerSimulationText.Enable = 'off';
+handles.realTimeCheckbox.Enable = 'off';
+handles.runAllStrategiesCheckbox.Enable = 'off';
+guidata(gcbo, handles);
+
+function enableControls(handles)
+handles.startButton.Enable = 'on';
+handles.strat1popup.Enable = 'on';
+handles.ballsInPlayPopup.Enable = 'on';
+handles.pointsPerSimulationText.Enable = 'on';
+handles.runAllStrategiesCheckbox.Enable = 'on';
+handles.realTimeCheckbox.Enable = 'on';
+if handles.runAllStrategiesCheckbox.Value
+    handles.strat2popup.Enable = 'off';
+else
+    handles.strat2popup.Enable = 'on';
+end
+guidata(gcbo, handles);
