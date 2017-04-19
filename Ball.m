@@ -11,8 +11,8 @@ classdef Ball < Entity
     end
     
     methods
-        function obj = Ball(handles)
-            obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize);
+        function obj = Ball(handles, realTime)
+            obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize, realTime);
             
             %Calculate Initial Ball velocity
             obj.velocity = struct('x', (rand()*100)+200, 'y', 0);
@@ -52,21 +52,23 @@ classdef Ball < Entity
                 obj.velocity.y = -obj.velocity.y;
             end
             obj.SetPosition(x, y);
-            s = size(obj.points);
-            numPoints = s(2);
-            obj.points(1, numPoints+1) = obj.position.x;
-            obj.points(2, numPoints+1) = obj.position.y;
-            if ishandle(obj.pointPlot)
-                delete(obj.pointPlot);
+            if obj.realTime
+                s = size(obj.points);
+                numPoints = s(2);
+                obj.points(1, numPoints+1) = obj.position.x;
+                obj.points(2, numPoints+1) = obj.position.y;
+                if ishandle(obj.pointPlot)
+                    delete(obj.pointPlot);
+                end
+                hold('on');
+                startPoint = max(1, numPoints-obj.pointPlotLength);
+                endPoint = numPoints+1;
+                obj.pointPlot = plot(obj.points(1,startPoint:endPoint), obj.points(2, startPoint:endPoint));
+                obj.pointPlot.Color = obj.pointPlotColor;
+                obj.pointPlot.Marker = '.';
+                obj.pointPlot.Parent = obj.handles.gameplot;
+                hold('off');
             end
-            hold('on');
-            startPoint = max(1, numPoints-obj.pointPlotLength);
-            endPoint = numPoints+1;
-            obj.pointPlot = plot(obj.points(1,startPoint:endPoint), obj.points(2, startPoint:endPoint));
-            obj.pointPlot.Color = obj.pointPlotColor;
-            obj.pointPlot.Marker = '.';
-            obj.pointPlot.Parent = obj.handles.gameplot;
-            hold('off');
         end
         
         function angle = GetAngle(obj)

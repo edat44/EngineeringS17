@@ -1,34 +1,31 @@
-function wins = StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay, realTime)
+function wins = StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay, realTime, hwb, simulationNumber, numSimulations)
 
 
 rng('shuffle');
 
 %% Create both players with correct difficulty and strategy
-handles.paddles = {Paddle(handles, leftStrategy, handles.leftOffset, -handles.scoreTextX),...
-                Paddle(handles, rightStrategy, handles.rightOffset, handles.scoreTextX)};
+handles.paddles = {Paddle(handles, leftStrategy, handles.leftOffset, -handles.scoreTextX, realTime),...
+                Paddle(handles, rightStrategy, handles.rightOffset, handles.scoreTextX, realTime)};
 paddles = handles.paddles;
 
 leftPlayer = 1;
 rightPlayer = 2;
 %% Create ball(s)
-balls = {Ball(handles)};
+balls = {Ball(handles, realTime)};
 
 ballsScored = 0;
 
 %% Start simulation
 fprintf('Simulation beginning: ''%s'' Strategy\n', handles.strategies{rightStrategy});
 terminated = false;
-hwb = waitbar(0, 'Waiting...');
-hwb.NumberTitle = 'off';
-hwb.Name = [handles.strategies{rightStrategy}, ' Game Progress'];
-%hwb.Position(2) = hwb.Position(2) - (hwb.Position(3)*1.5);
 try 
     handles.gameRunning = true;
     guidata(gcbo, handles);
     while ballsScored < ballsPerSimulation
         if ishandle(hwb)
-            waitbar((ballsScored+1)/ballsPerSimulation, hwb,...
-                ['Playing Ball ', num2str(ballsScored+1), ' out of ', num2str(ballsPerSimulation)]);
+            endPoint = ballsPerSimulation*numSimulations;
+            progress = (ballsPerSimulation*(simulationNumber-1))+(ballsScored+1);
+            waitbar((progress/endPoint), hwb, [num2str(progress), ' / ', num2str(endPoint)]);
         else
             terminated = true;
             break;
@@ -74,7 +71,7 @@ try
                 delete(ball);
                 ballsScored = ballsScored + 1;
                 if ballsScored < ballsPerSimulation
-                    balls{iBall} = Ball(handles);
+                    balls{iBall} = Ball(handles, realTime);
                 else
                     balls(iBall) = [];
                 end
@@ -84,7 +81,7 @@ try
                 delete(ball);
                 ballsScored = ballsScored + 1;
                 if ballsScored < ballsPerSimulation
-                    balls{iBall} = Ball(handles);
+                    balls{iBall} = Ball(handles, realTime);
                 else
                     balls(iBall) = [];
                 end
@@ -121,9 +118,6 @@ catch ERR
     handles.gameRunning = false;
 end
 
-if ishandle(hwb)
-    close(hwb);
-end
 handles.gameRunning = false;
 if ~isempty(gcbo)
     guidata(gcbo, handles);

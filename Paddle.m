@@ -10,14 +10,17 @@ classdef Paddle < Entity
     end
     
     methods
-        function obj = Paddle(handles, strategy, xPos, scoreTextX)
-            obj = obj@Entity(handles, xPos, 0, handles.paddleWidth, handles.paddleHeight);
+        function obj = Paddle(handles, strategy, xPos, scoreTextX, realTime)
+            obj = obj@Entity(handles, xPos, 0, handles.paddleWidth, handles.paddleHeight, realTime);
             obj.scoreTextPosition = struct('x', scoreTextX, 'y', handles.scoreTextY);
             obj.strategy = strategy;
             obj.baseSpeed = handles.paddleSpeed / handles.fps;
             obj.score = 0;
-            obj.scoreText = text('Parent', handles.gameplot, 'Color', 'w', 'FontSize', 36);
-            obj.UpdateScoreDisplay();
+            if realTime
+                obj.scoreText = text('Parent', handles.gameplot, 'Color', 'w', 'FontSize', 36);
+                obj.UpdateScoreDisplay();
+        
+            end
         end
         
         function Update(obj, ball)
@@ -55,7 +58,9 @@ classdef Paddle < Entity
         
         function Score(obj)
             obj.score = obj.score + 1;
-            obj.UpdateScoreDisplay();
+            if obj.realTime
+                obj.UpdateScoreDisplay();
+            end
         end
         
         function delete(obj)

@@ -8,17 +8,21 @@ classdef (Abstract) Entity < handle
         width
         height
         rect
+        realTime
     end
     
     methods (Access = public)
-        function obj = Entity(handles, posX, posY, width, height)
+        function obj = Entity(handles, posX, posY, width, height, realTime)
             obj.handles = handles;
             obj.position = struct('x', posX, 'y', posY);
             obj.lastPosition = struct('x', posX, 'y', posY);
             obj.width = width;
             obj.height = height;
-            obj.rect = rectangle('Parent', handles.gameplot, 'FaceColor', 'white', 'LineStyle', 'none');
-            obj.UpdateImage();
+            obj.realTime = realTime;
+            if obj.realTime
+                obj.rect = rectangle('Parent', handles.gameplot, 'FaceColor', 'white', 'LineStyle', 'none');
+                obj.UpdateImage();
+            end
         end
         
         function data = Borders(obj)
@@ -68,7 +72,9 @@ classdef (Abstract) Entity < handle
             else
                 obj.position.y = y;
             end
-            obj.UpdateImage();
+            if obj.realTime
+                obj.UpdateImage();
+            end
         end
     end
     

@@ -105,26 +105,23 @@ if ~handles.gameRunning
     clc;
     cla(handles.singleballAxes,'reset')
     ballsPerSimulation = str2double(handles.ballsPerSimulationText.String);
+    hwb = waitbar(0, 'Waiting...');
+    hwb.NumberTitle = 'off';
+    hwb.Name = 'Simulation Progress';
+    
     if handles.runAllStrategiesCheckbox.Value
         totalSimulations = length(handles.strategies);
         wins = zeros(1, length(handles.strategies));
-        hwb = waitbar(0, 'Waiting...');
-        hwb.NumberTitle = 'off';
-        hwb.Name = 'Multi-Simulation Progress';
         for iStrategyNumber=1:totalSimulations
-            if ishandle(hwb)
-                waitbar(iStrategyNumber/totalSimulations, hwb,...
-                    ['Simulation ', num2str(iStrategyNumber), ' out of ', num2str(totalSimulations), ': ',...
-                    handles.strategies{iStrategyNumber}]);
-            else
-                break;
-            end
             wins(iStrategyNumber) = StartGame(handles,...
                 handles.strat1popup.Value,...
                 iStrategyNumber,...
                 ballsPerSimulation,...
                 handles.numberofBalls(handles.ballsInPlayPopup.Value),...
-                handles.realTimeCheckbox.Value);
+                handles.realTimeCheckbox.Value,...
+                hwb,...
+                iStrategyNumber,...
+                totalSimulations);
             if wins(iStrategyNumber) == -1
                 break;
             end
@@ -136,9 +133,6 @@ if ~handles.gameRunning
             xlabel('Strategy Type');
             ylabel('Percent of Points Won');
         end
-        if ishandle(hwb)
-            close(hwb);
-        end
     else
         strategyNumber = handles.strat2popup.Value;
         wins = StartGame(handles,...
@@ -146,7 +140,10 @@ if ~handles.gameRunning
             strategyNumber,...
             ballsPerSimulation,...
             handles.numberofBalls(handles.ballsInPlayPopup.Value),...
-            handles.realTimeCheckbox.Value);
+            handles.realTimeCheckbox.Value,...
+            hwb,...
+            strategyNumber,...
+            1);
         if wins ~= -1
             X = handles.strategies{strategyNumber};
             Y = (wins / ballsPerSimulation) * 100;
@@ -156,6 +153,10 @@ if ~handles.gameRunning
             xlabel('Strategy Type');
             ylabel('Percent of Points Won');
         end
+    end
+    
+    if ishandle(hwb)
+        close(hwb);
     end
 else
     disp('Sorry, game already running');
