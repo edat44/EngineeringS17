@@ -22,7 +22,7 @@ function varargout = PongTool(varargin)
 
 % Edit the above text to modify the response to help PongTool
 
-% Last Modified by GUIDE v2.5 18-Apr-2017 15:23:56
+% Last Modified by GUIDE v2.5 18-Apr-2017 20:26:44
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,12 +52,13 @@ handles.conservative = 1;
 handles.balanced = 2;
 handles.aggressive = 3;
 handles.berserk = 4;
-handles.strategies = {'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
+handles.strategies = handles.strat1popup.String;
+%{'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
 
 handles.singleBall = 1;
 handles.multiBall3 = 2;
 handles.multiBall5 = 3;
-handles.NumberofBalls = [1, 3, 5];
+handles.numberofBalls = [1, 3, 5];
 
 handles.leftOffset = -180;
 handles.rightOffset = -handles.leftOffset;
@@ -75,10 +76,10 @@ handles.quarterSize = struct('width', 200, 'height', 125);
 
 handles.gameRunning = false;
 
-handles.fps = 100;
-handles.frameDelay = 1/handles.fps;
+handles.fps = 50;
+handles.frameLength = 1/handles.fps;
 
-handles.ballsPerSimulation = 2;
+handles.ballsPerSimulation = 3;
 
 configureAxes(handles);
 
@@ -101,7 +102,11 @@ function startButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if ~handles.gameRunning
-    StartGame(handles);
+    StartGame(handles,...
+        handles.strat1popup.Value,...
+        handles.strat2popup.Value,...
+        str2double(handles.ballsPerSimulationText.String),...
+        handles.numberofBalls(handles.ballsInPlayPopup.Value));
 else
     disp('Sorry, game already running');
 end
@@ -113,4 +118,17 @@ function cancelSimulationButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 handles.gameRunning = false;
+disp('Cancelling simulation');
+guidata(gcf, handles);
+
+% --- Executes on Callback of ballsPerSimulation
+function ballsPerSimulationText_Callback(hObject, eventdata, handles)
+% hObject    handle to startButton (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+balls = str2double(hObject.String);
+balls = max(min(balls, 10000), 1);
+hObject.String = balls;
 guidata(hObject, handles);
+
+

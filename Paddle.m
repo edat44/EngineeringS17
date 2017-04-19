@@ -30,17 +30,26 @@ classdef Paddle < Entity
             obj.scoreText.Position = [obj.scoreTextPosition.x - obj.scoreText.Extent(3)/2, obj.scoreTextPosition.y];
         end
         
-        function UpdatePosition(obj, ball)
+        function UpdatePosition(obj, balls)
             y = obj.position.y;
+            targetY = obj.position.y;
             switch obj.strategy
-                %PLACE PADDLE STRATEGIES HERE
+                otherwise
+                    if length(balls) == 0
+                        targetY = 0;
+                    else
+                        ballPos = balls{1}.GetPosition();
+                        targetY = ballPos.y;
+                    end
             end
-            ballPos = ball.GetPosition();
-            if ballPos.y > obj.position.y
-                y = min(y + obj.baseSpeed, ballPos.y);
-            elseif ballPos.y < obj.position.y
-                y = max(y - obj.baseSpeed, ballPos.y);
-            end
+            if targetY < obj.position.y
+                y = max(targetY, obj.position.y - obj.baseSpeed);
+            elseif targetY > obj.position.y
+                y = min(targetY, obj.position.y + obj.baseSpeed);
+            else
+                y = obj.position.y;
+            end    
+            
             obj.SetPosition(obj.position.x, y);
         end
         

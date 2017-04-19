@@ -1,12 +1,18 @@
-function StartGame(handles)
+function StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay)
 
 
 rng('shuffle');
 
 %% Create both players with correct difficulty and strategy
-paddles = {  Paddle(handles, handles.strat1popup.Value, handles.leftOffset, -handles.scoreTextX),...
-                Paddle(handles, handles.strat2popup.Value, handles.rightOffset, handles.scoreTextX)};
-            
+if isfield(handles, 'paddles')
+    for iPaddle=1:length(handles.paddles)
+       handles.paddles{iPaddle}.delete();
+    end
+end
+handles.paddles = {Paddle(handles, leftStrategy, handles.leftOffset, -handles.scoreTextX),...
+                Paddle(handles, rightStrategy, handles.rightOffset, handles.scoreTextX)};
+paddles = handles.paddles;
+
 leftPlayer = 1;
 rightPlayer = 2;
 %% Create ball(s)
@@ -20,12 +26,12 @@ terminated = false;
 try
     handles.gameRunning = true;
     guidata(gcf, handles);
-    while handles.gameRunning && length(balls)
+    while handles.gameRunning && ballsScored < ballsPerSimulation;
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
         for iPaddle=1:length(paddles)
             %Update paddle
-            paddles{iPaddle}.Update(balls{1});
+            paddles{iPaddle}.Update(balls);
         end
         
         %% Update Balls
@@ -61,7 +67,7 @@ try
                 paddles{rightPlayer}.Score();
                 delete(ball);
                 ballsScored = ballsScored + 1;
-                if ballsScored < handles.ballsPerSimulation
+                if ballsScored < ballsPerSimulation
                     balls{iBall} = Ball(handles);
                 else
                     balls(iBall) = [];
@@ -71,7 +77,7 @@ try
                 paddles{leftPlayer}.Score();
                 delete(ball);
                 ballsScored = ballsScored + 1;
-                if ballsScored < handles.ballsPerSimulation
+                if ballsScored < ballsPerSimulation
                     balls{iBall} = Ball(handles);
                 else
                     balls(iBall) = [];
@@ -83,15 +89,15 @@ try
         
         %% Finish out loop
         timeElapsed = toc;
-        if timeElapsed > handles.frameDelay
+        if timeElapsed > handles.frameLength
             fprintf(['WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\t',...
                 'time elapsed = %d\n\t',...
                 'frame delay = %d\n\t',...
                 'left over time = %d\n'],...
-                timeElapsed, handles.frameDelay, handles.frameDelay-timeElapsed);
+                timeElapsed, handles.frameLength, handles.frameLength-timeElapsed);
         end
         
-        pause(max(handles.frameDelay-timeElapsed, 0));
+        pause(max(handles.frameLength-timeElapsed, 0));
     end
 catch ERR
     fprintf('ERROR: %s\n\t%s\n', ERR.identifier, ERR.message);
