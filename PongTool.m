@@ -22,7 +22,7 @@ function varargout = PongTool(varargin)
 
 % Edit the above text to modify the response to help PongTool
 
-% Last Modified by GUIDE v2.5 19-Apr-2017 00:00:17
+% Last Modified by GUIDE v2.5 19-Apr-2017 18:54:26
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -79,7 +79,7 @@ handles.gameRunning = false;
 handles.fps = 30;
 handles.frameLength = 1/handles.fps;
 
-handles.ballsPerSimulation = 3;
+handles.pointsPerSimulation = 3;
 
 configureAxes(handles);
 
@@ -103,8 +103,8 @@ function startButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 if ~handles.gameRunning
     clc;
-    cla(handles.singleballAxes,'reset')
-    ballsPerSimulation = str2double(handles.ballsPerSimulationText.String);
+    cla(handles.analysisAxes,'reset')
+    pointsPerSimulation = str2double(handles.pointsPerSimulationText.String);
     hwb = waitbar(0, 'Waiting...');
     hwb.NumberTitle = 'off';
     hwb.Name = 'Simulation Progress';
@@ -116,7 +116,7 @@ if ~handles.gameRunning
             wins(iStrategyNumber) = StartGame(handles,...
                 handles.strat1popup.Value,...
                 iStrategyNumber,...
-                ballsPerSimulation,...
+                pointsPerSimulation,...
                 handles.numberofBalls(handles.ballsInPlayPopup.Value),...
                 handles.realTimeCheckbox.Value,...
                 hwb,...
@@ -126,10 +126,10 @@ if ~handles.gameRunning
                 break;
             end
             X = handles.strategies;
-            Y = (wins / ballsPerSimulation) * 100;
-            bar(handles.singleballAxes, Y);
-            handles.singleballAxes.XTickLabel = X;
-            handles.singleballAxes.YLim = [0, 100];
+            Y = (wins / pointsPerSimulation) * 100;
+            bar(handles.analysisAxes, Y);
+            handles.analysisAxes.XTickLabel = X;
+            handles.analysisAxes.YLim = [0, 100];
             xlabel('Strategy Type');
             ylabel('Percent of Points Won');
         end
@@ -138,7 +138,7 @@ if ~handles.gameRunning
         wins = StartGame(handles,...
             handles.strat1popup.Value,...
             strategyNumber,...
-            ballsPerSimulation,...
+            pointsPerSimulation,...
             handles.numberofBalls(handles.ballsInPlayPopup.Value),...
             handles.realTimeCheckbox.Value,...
             hwb,...
@@ -146,10 +146,10 @@ if ~handles.gameRunning
             1);
         if wins ~= -1
             X = handles.strategies{strategyNumber};
-            Y = (wins / ballsPerSimulation) * 100;
-            bar(handles.singleballAxes, Y);
-            handles.singleballAxes.XTickLabel = X;
-            handles.singleballAxes.YLim = [0, 100];
+            Y = (wins / pointsPerSimulation) * 100;
+            bar(handles.analysisAxes, Y);
+            handles.analysisAxes.XTickLabel = X;
+            handles.analysisAxes.YLim = [0, 100];
             xlabel('Strategy Type');
             ylabel('Percent of Points Won');
         end
@@ -175,8 +175,8 @@ handles.gameRunning = false;
 disp('Cancelling simulation');
 guidata(gcbo, handles);
 
-% --- Executes on Callback of ballsPerSimulation
-function ballsPerSimulationText_Callback(hObject, eventdata, handles)
+% --- Executes on Callback of pointsPerSimulation
+function pointsPerSimulationText_Callback(hObject, eventdata, handles)
 % hObject    handle to startButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)

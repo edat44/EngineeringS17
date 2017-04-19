@@ -1,4 +1,4 @@
-function wins = StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay, realTime, hwb, simulationNumber, numSimulations)
+function wins = StartGame(handles, leftStrategy, rightStrategy, pointsPerSimulation, ballsInPlay, realTime, hwb, simulationNumber, numSimulations)
 
 
 rng('shuffle');
@@ -21,11 +21,12 @@ terminated = false;
 try 
     handles.gameRunning = true;
     guidata(gcbo, handles);
-    while ballsScored < ballsPerSimulation
+    while ballsScored < pointsPerSimulation
         if ishandle(hwb)
-            endPoint = ballsPerSimulation*numSimulations;
-            progress = (ballsPerSimulation*(simulationNumber-1))+(ballsScored+1);
-            waitbar((progress/endPoint), hwb, [num2str(progress), ' / ', num2str(endPoint)]);
+            endPoint = pointsPerSimulation*numSimulations;
+            progress = (pointsPerSimulation*(simulationNumber-1))+(ballsScored+1);
+            percentDone = progress/endPoint;
+            waitbar((percentDone), hwb, [num2str(progress), ' / ', num2str(endPoint), ' (', num2str(percentDone*100), '%)']);
         else
             terminated = true;
             break;
@@ -70,7 +71,7 @@ try
                 paddles{rightPlayer}.Score();
                 delete(ball);
                 ballsScored = ballsScored + 1;
-                if ballsScored < ballsPerSimulation
+                if ballsScored < pointsPerSimulation
                     balls{iBall} = Ball(handles, realTime);
                 else
                     balls(iBall) = [];
@@ -80,7 +81,7 @@ try
                 paddles{leftPlayer}.Score();
                 delete(ball);
                 ballsScored = ballsScored + 1;
-                if ballsScored < ballsPerSimulation
+                if ballsScored < pointsPerSimulation
                     balls{iBall} = Ball(handles, realTime);
                 else
                     balls(iBall) = [];
