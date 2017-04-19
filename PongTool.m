@@ -22,7 +22,7 @@ function varargout = PongTool(varargin)
 
 % Edit the above text to modify the response to help PongTool
 
-% Last Modified by GUIDE v2.5 18-Apr-2017 20:26:44
+% Last Modified by GUIDE v2.5 18-Apr-2017 23:04:10
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,7 +52,7 @@ handles.conservative = 1;
 handles.balanced = 2;
 handles.aggressive = 3;
 handles.berserk = 4;
-handles.strategies = handles.strat1popup.String;
+handles.strategies = handles.strat2popup.String;
 %{'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
 
 handles.singleBall = 1;
@@ -76,7 +76,7 @@ handles.quarterSize = struct('width', 200, 'height', 125);
 
 handles.gameRunning = false;
 
-handles.fps = 50;
+handles.fps = 30;
 handles.frameLength = 1/handles.fps;
 
 handles.ballsPerSimulation = 3;
@@ -102,11 +102,51 @@ function startButton_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 if ~handles.gameRunning
-    StartGame(handles,...
-        handles.strat1popup.Value,...
-        handles.strat2popup.Value,...
-        str2double(handles.ballsPerSimulationText.String),...
-        handles.numberofBalls(handles.ballsInPlayPopup.Value));
+    clc;
+    cla(handles.singleballAxes,'reset')
+    ballsPerSimulation = str2double(handles.ballsPerSimulationText.String);
+    if handles.runAllStrategiesCheckbox.Value
+        totalSimulations = length(handles.strategies);
+        wins = zeros(1, length(handles.strategies));
+        hwb = waitbar(0);
+        for iStrategyNumber=1:totalSimulations
+            waitbar(iStrategyNumber/totalSimulations, hwb,...
+                ['Simulation ', num2str(iStrategyNumber), ' out of ', num2str(totalSimulations), ': ',...
+                handles.strategies{iStrategyNumber}]);
+            wins(iStrategyNumber) = StartGame(handles,...
+                handles.strat1popup.Value,...
+                iStrategyNumber,...
+                ballsPerSimulation,...
+                handles.numberofBalls(handles.ballsInPlayPopup.Value));
+            if wins(iStrategyNumber) == -1
+                break;
+            end
+            X = handles.strategies;
+            Y = (wins / ballsPerSimulation) * 100;
+            bar(handles.singleballAxes, Y);
+            handles.singleballAxes.XTickLabel = X;
+            handles.singleballAxes.YLim = [0, 100];
+            xlabel('Strategy Type');
+            ylabel('Percent of Points Won');
+        end
+        close(hwb);
+    else
+        strategyNumber = handles.strat2popup.Value;
+        wins = StartGame(handles,...
+            handles.strat1popup.Value,...
+            strategyNumber,...
+            ballsPerSimulation,...
+            handles.numberofBalls(handles.ballsInPlayPopup.Value));
+        if wins ~= -1
+            X = handles.strategies{strategyNumber};
+            Y = (wins / ballsPerSimulation) * 100;
+            bar(handles.singleballAxes, Y);
+            handles.singleballAxes.XTickLabel = X;
+            handles.singleballAxes.YLim = [0, 100];
+            xlabel('Strategy Type');
+            ylabel('Percent of Points Won');
+        end
+    end
 else
     disp('Sorry, game already running');
 end
@@ -119,7 +159,7 @@ function cancelSimulationButton_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 handles.gameRunning = false;
 disp('Cancelling simulation');
-guidata(gcf, handles);
+guidata(hObject, handles);
 
 % --- Executes on Callback of ballsPerSimulation
 function ballsPerSimulationText_Callback(hObject, eventdata, handles)
@@ -132,3 +172,12 @@ hObject.String = balls;
 guidata(hObject, handles);
 
 
+
+
+% --- Executes on button press in runAllStrategiesCheckbox.
+function runAllStrategiesCheckbox_Callback(hObject, eventdata, handles)
+if hObject.Value
+    handles.strat2popup.Enable = 'off';
+else
+    handles.strat2popup.Enable = 'on';
+end

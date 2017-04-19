@@ -1,4 +1,4 @@
-function StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay)
+function wins = StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay)
 
 
 rng('shuffle');
@@ -7,6 +7,7 @@ rng('shuffle');
 if isfield(handles, 'paddles')
     for iPaddle=1:length(handles.paddles)
        handles.paddles{iPaddle}.delete();
+       handles.paddles(iPaddle) = [];
     end
 end
 handles.paddles = {Paddle(handles, leftStrategy, handles.leftOffset, -handles.scoreTextX),...
@@ -21,12 +22,12 @@ balls = {Ball(handles)};
 ballsScored = 0;
 
 %% Start simulation
-disp('Simulation beginning...');
+fprintf('Simulation beginning: ''%s'' Strategy\n', handles.strategies{rightStrategy});
 terminated = false;
 try
     handles.gameRunning = true;
-    guidata(gcf, handles);
-    while handles.gameRunning && ballsScored < ballsPerSimulation;
+    guidata(gcbo, handles);
+    while ballsScored < ballsPerSimulation
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
         for iPaddle=1:length(paddles)
@@ -98,6 +99,11 @@ try
         end
         
         pause(max(handles.frameLength-timeElapsed, 0));
+        handles = guidata(gcbo);
+        if ~handles.gameRunning
+            terminated = true;
+            break;
+        end
     end
 catch ERR
     fprintf('ERROR: %s\n\t%s\n', ERR.identifier, ERR.message);
@@ -118,21 +124,23 @@ end
 %     delete(paddles{iPaddle});
 %     paddles(iPaddle) = [];
 % end
-
+handles.gameRunning = false;
+guidata(gcbo, handles);
 if ~terminated
-    handles.gameRunning = false;
-    guidata(gcf, handles);
     disp('Simulation finished');
+    wins = paddles{rightPlayer}.score;
     
     
-    %% Report game statistics
-    leftPlayerScore = paddles{leftPlayer}.score;
-    rightPlayerScore = paddles{rightPlayer}.score;
-    X = {handles.strategies{paddles{leftPlayer}.strategy}, handles.strategies{paddles{rightPlayer}.strategy}};
-    Y = [leftPlayerScore rightPlayerScore];
-    disp(X);
-    bar(handles.singleballAxes,Y)
-    handles.singleballAxes.XTickLabel = X;
+%     %% Report game statistics
+%     leftPlayerScore = paddles{leftPlayer}.score;
+%     rightPlayerScore = paddles{rightPlayer}.score;
+%     X = {handles.strategies{paddles{leftPlayer}.strategy}, handles.strategies{paddles{rightPlayer}.strategy}};
+%     Y = [leftPlayerScore rightPlayerScore];
+%     disp(X);
+%     bar(handles.singleballAxes,Y)
+%     handles.singleballAxes.XTickLabel = X;
+else
+    wins = -1;
 end
 
 
