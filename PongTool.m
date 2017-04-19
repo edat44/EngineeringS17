@@ -22,7 +22,7 @@ function varargout = PongTool(varargin)
 
 % Edit the above text to modify the response to help PongTool
 
-% Last Modified by GUIDE v2.5 18-Apr-2017 23:04:10
+% Last Modified by GUIDE v2.5 19-Apr-2017 00:00:17
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -108,16 +108,23 @@ if ~handles.gameRunning
     if handles.runAllStrategiesCheckbox.Value
         totalSimulations = length(handles.strategies);
         wins = zeros(1, length(handles.strategies));
-        hwb = waitbar(0);
+        hwb = waitbar(0, 'Waiting...');
+        hwb.NumberTitle = 'off';
+        hwb.Name = 'Multi-Simulation Progress';
         for iStrategyNumber=1:totalSimulations
-            waitbar(iStrategyNumber/totalSimulations, hwb,...
-                ['Simulation ', num2str(iStrategyNumber), ' out of ', num2str(totalSimulations), ': ',...
-                handles.strategies{iStrategyNumber}]);
+            if ishandle(hwb)
+                waitbar(iStrategyNumber/totalSimulations, hwb,...
+                    ['Simulation ', num2str(iStrategyNumber), ' out of ', num2str(totalSimulations), ': ',...
+                    handles.strategies{iStrategyNumber}]);
+            else
+                break;
+            end
             wins(iStrategyNumber) = StartGame(handles,...
                 handles.strat1popup.Value,...
                 iStrategyNumber,...
                 ballsPerSimulation,...
-                handles.numberofBalls(handles.ballsInPlayPopup.Value));
+                handles.numberofBalls(handles.ballsInPlayPopup.Value),...
+                handles.realTimeCheckbox.Value);
             if wins(iStrategyNumber) == -1
                 break;
             end
@@ -129,14 +136,17 @@ if ~handles.gameRunning
             xlabel('Strategy Type');
             ylabel('Percent of Points Won');
         end
-        close(hwb);
+        if ishandle(hwb)
+            close(hwb);
+        end
     else
         strategyNumber = handles.strat2popup.Value;
         wins = StartGame(handles,...
             handles.strat1popup.Value,...
             strategyNumber,...
             ballsPerSimulation,...
-            handles.numberofBalls(handles.ballsInPlayPopup.Value));
+            handles.numberofBalls(handles.ballsInPlayPopup.Value),...
+            handles.realTimeCheckbox.Value);
         if wins ~= -1
             X = handles.strategies{strategyNumber};
             Y = (wins / ballsPerSimulation) * 100;
@@ -157,9 +167,12 @@ function cancelSimulationButton_Callback(hObject, eventdata, handles)
 % hObject    handle to cancelSimulationButton (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+cancelSimulation(handles);
+
+function cancelSimulation(handles)
 handles.gameRunning = false;
 disp('Cancelling simulation');
-guidata(hObject, handles);
+guidata(gcbo, handles);
 
 % --- Executes on Callback of ballsPerSimulation
 function ballsPerSimulationText_Callback(hObject, eventdata, handles)

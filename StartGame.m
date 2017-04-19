@@ -1,15 +1,9 @@
-function wins = StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay)
+function wins = StartGame(handles, leftStrategy, rightStrategy, ballsPerSimulation, ballsInPlay, realTime)
 
 
 rng('shuffle');
 
 %% Create both players with correct difficulty and strategy
-if isfield(handles, 'paddles')
-    for iPaddle=1:length(handles.paddles)
-       handles.paddles{iPaddle}.delete();
-       handles.paddles(iPaddle) = [];
-    end
-end
 handles.paddles = {Paddle(handles, leftStrategy, handles.leftOffset, -handles.scoreTextX),...
                 Paddle(handles, rightStrategy, handles.rightOffset, handles.scoreTextX)};
 paddles = handles.paddles;
@@ -24,10 +18,21 @@ ballsScored = 0;
 %% Start simulation
 fprintf('Simulation beginning: ''%s'' Strategy\n', handles.strategies{rightStrategy});
 terminated = false;
-try
+hwb = waitbar(0, 'Waiting...');
+hwb.NumberTitle = 'off';
+hwb.Name = [handles.strategies{rightStrategy}, ' Game Progress'];
+%hwb.Position(2) = hwb.Position(2) - (hwb.Position(3)*1.5);
+try 
     handles.gameRunning = true;
     guidata(gcbo, handles);
     while ballsScored < ballsPerSimulation
+        if ishandle(hwb)
+            waitbar((ballsScored+1)/ballsPerSimulation, hwb,...
+                ['Playing Ball ', num2str(ballsScored+1), ' out of ', num2str(ballsPerSimulation)]);
+        else
+            terminated = true;
+            break;
+        end
         tic; %starts timer to check how long loop iteration takes
         %% Update Paddles
         for iPaddle=1:length(paddles)
@@ -89,16 +94,18 @@ try
         
         
         %% Finish out loop
-        timeElapsed = toc;
-        if timeElapsed > handles.frameLength
-            fprintf(['WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\t',...
-                'time elapsed = %d\n\t',...
-                'frame delay = %d\n\t',...
-                'left over time = %d\n'],...
-                timeElapsed, handles.frameLength, handles.frameLength-timeElapsed);
+        if realTime
+            timeElapsed = toc;
+            if timeElapsed > handles.frameLength
+                fprintf(['WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\t',...
+                    'time elapsed = %d\n\t',...
+                    'frame delay = %d\n\t',...
+                    'left over time = %d\n'],...
+                    timeElapsed, handles.frameLength, handles.frameLength-timeElapsed);
+            end
+            
+            pause(max(handles.frameLength-timeElapsed, 0));
         end
-        
-        pause(max(handles.frameLength-timeElapsed, 0));
         handles = guidata(gcbo);
         if ~handles.gameRunning
             terminated = true;
@@ -114,34 +121,29 @@ catch ERR
     handles.gameRunning = false;
 end
 
+if ishandle(hwb)
+    close(hwb);
+end
+handles.gameRunning = false;
+if ~isempty(gcbo)
+    guidata(gcbo, handles);
+end
+if ~terminated
+    disp('Simulation finished');
+    wins = paddles{rightPlayer}.score;
+else
+    wins = -1;
+end
+
 %% Delete game objects
 for iBall=length(balls):-1:1
     delete(balls{iBall});
     balls(iBall) = [];
 end
 
-% for iPaddle=length(paddles):-1:1
-%     delete(paddles{iPaddle});
-%     paddles(iPaddle) = [];
-% end
-handles.gameRunning = false;
-guidata(gcbo, handles);
-if ~terminated
-    disp('Simulation finished');
-    wins = paddles{rightPlayer}.score;
-    
-    
-%     %% Report game statistics
-%     leftPlayerScore = paddles{leftPlayer}.score;
-%     rightPlayerScore = paddles{rightPlayer}.score;
-%     X = {handles.strategies{paddles{leftPlayer}.strategy}, handles.strategies{paddles{rightPlayer}.strategy}};
-%     Y = [leftPlayerScore rightPlayerScore];
-%     disp(X);
-%     bar(handles.singleballAxes,Y)
-%     handles.singleballAxes.XTickLabel = X;
-else
-    wins = -1;
+for iPaddle=length(paddles):-1:1
+    delete(paddles{iPaddle});
+    paddles(iPaddle) = [];
 end
-
 
 
