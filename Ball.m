@@ -1,7 +1,7 @@
 classdef Ball < Entity
     %Ball
     
-    properties
+    properties (Access = public)
         velocity %vector with x and y components
         acceleration %scalar
         points

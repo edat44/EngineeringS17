@@ -1,7 +1,7 @@
 classdef (Abstract) Entity < handle
     %Entity
     
-    properties
+    properties (Access = public)
         handles
         position
         lastPosition
