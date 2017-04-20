@@ -65,6 +65,7 @@ classdef (Abstract) Entity < handle
             obj.lastPosition.x = obj.position.x;
             obj.lastPosition.y = obj.position.y;
             obj.position.x = x;
+            obj.position.y = y;
             if obj.Borders().top > obj.handles.quarterSize.height
                 obj.position.y = obj.handles.quarterSize.height - obj.height/2;
             elseif obj.Borders().bottom < -obj.handles.quarterSize.height
@@ -81,7 +82,9 @@ classdef (Abstract) Entity < handle
     methods (Access = private)
         function UpdateImage(obj)
             borders = obj.Borders();
-            obj.rect.Position = [borders.left, borders.bottom, obj.width, obj.height];
+            if ishandle(obj.rect)
+                obj.rect.Position = [borders.left, borders.bottom, obj.width, obj.height];
+            end
         end
     end
     

@@ -3,7 +3,7 @@ classdef Ball < Entity
     
     properties (Access = public)
         velocity %vector with x and y components
-        acceleration %scalar
+        accelerationDamping %scalar
         points
         pointPlot
         pointPlotColor
@@ -15,8 +15,8 @@ classdef Ball < Entity
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize, realTime);
             
             %Calculate Initial Ball velocity
-            obj.velocity = struct('x', (rand()*100)+20, 'y', 0);
-            angleRange = [pi/10, pi/4];
+            obj.velocity = struct('x', (rand()*100)+100, 'y', 0);
+            angleRange = [pi/20, pi/8];
             angle = (rand()*(angleRange(2)-angleRange(1)))+angleRange(1);
             horizontalSwitch = rand()*2;
             verticalSwitch = rand()*2;
@@ -28,7 +28,7 @@ classdef Ball < Entity
             end
             obj.SetVelocityFromAngle(angle);
             
-            obj.acceleration = 5;
+            obj.accelerationDamping = handles.ballAccelerationDamping;
             obj.points = zeros(2,1);
             obj.pointPlotColor = [(rand()/2)+0.5, (rand()/2)+0.5, (rand()/2)+0.5];
             obj.pointPlotLength = 50;
@@ -38,14 +38,14 @@ classdef Ball < Entity
             angle = obj.GetAngle();
             deltat = 1/obj.handles.fps;
             %Use Verlet method to calculate new position and velocity
-            vhalfx = obj.velocity.x + obj.acceleration*cos(angle)*(deltat/2)/abs(obj.velocity.x)*sign(obj.velocity.x);
-            vhalfy = obj.velocity.y + obj.acceleration*sin(angle)*(deltat/2)/abs(obj.velocity.y)*sign(obj.velocity.y);
+            vhalfx = obj.velocity.x + abs(obj.velocity.x)/(obj.accelerationDamping*cos(angle))*(deltat/2)*sign(obj.velocity.x);
+            vhalfy = obj.velocity.y + abs(obj.velocity.y)/(obj.accelerationDamping*sin(angle))*(deltat/2)*sign(obj.velocity.y);
             
             x = obj.position.x + (vhalfx*deltat);
             y = obj.position.y + (vhalfy*deltat);
             
-            obj.velocity.x = vhalfx + obj.acceleration*cos(angle)*(deltat/2)/abs(vhalfx)*sign(vhalfx);
-            obj.velocity.y = vhalfy + obj.acceleration*sin(angle)*(deltat/2)/abs(vhalfy)*sign(vhalfy);
+            obj.velocity.x = vhalfx + abs(vhalfx)/(obj.accelerationDamping*cos(angle))*(deltat/2)*sign(vhalfx);
+            obj.velocity.y = vhalfy + abs(vhalfy)/(obj.accelerationDamping*sin(angle))*(deltat/2)*sign(vhalfy);
             
             yLimit = obj.handles.quarterSize.height - obj.height/2;
             if abs(y) > yLimit

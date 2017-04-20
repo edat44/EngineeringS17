@@ -50,9 +50,9 @@ handles.output = hObject;
 
 handles.conservative = 1;
 handles.balanced = 2;
-handles.offensive = 3;
-handles.aggressive = 4;
-handles.berserk = 5;
+handles.aggressive = 3;
+handles.berserk = 4;
+handles.offensive = 5;
 handles.strategies = handles.strat2popup.String;
 %{'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
 
@@ -71,7 +71,8 @@ handles.paddleWidth = 10;
 handles.paddleHeight = 60;
 handles.ballSize = 8;
 
-handles.paddleSpeed = 70;
+handles.paddleSpeed = 90;
+handles.ballAccelerationDamping = 50;
 
 handles.quarterSize = struct('width', 200, 'height', 125);
 
@@ -131,12 +132,6 @@ if ~handles.gameRunning
                 break;
             end
             
-            % Store data from the match
-            matchData.cpuStrategy = cpuStrategy;
-            matchData.ballsInPlay = ballsInPlay;
-            matchData.ballsPerSimulation = ballsPerSimulation;
-            matchData.wins = wins;
-            matchData.strategyNames
             
             % Make a bar chart to show data
             X = handles.strategies;
@@ -148,6 +143,13 @@ if ~handles.gameRunning
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Percent of Points Won');
         end
+        
+        % Store data from the match
+        matchData.cpuStrategy = cpuStrategy;
+        matchData.ballsInPlay = ballsInPlay;
+        matchData.pointsPerSimulation = pointsPerSimulation;
+        matchData.wins = wins;
+        matchData.strategyNames
     else
         strategyNumber = handles.strat2popup.Value;
         wins = StartGame(handles,...
@@ -157,7 +159,7 @@ if ~handles.gameRunning
             ballsInPlay,...
             realTime,...
             hwb,...
-            strategyNumber,...
+            1,...
             1);
         if wins ~= -1
             X = handles.strategies{strategyNumber};

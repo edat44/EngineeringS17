@@ -1,4 +1,4 @@
-function wins = StartGame(handles, leftStrategy, rightStrategy, pointsPerSimulation, ballsInPlay, realTime, hwb, simulationNumber, numSimulations)
+function wins = StartGame(handles, leftStrategy, rightStrategy, pointsPerSimulation, ballsInPlay, realTime, hwb, currentSimulation, totalSimulations)
 
 
 rng('shuffle');
@@ -23,8 +23,8 @@ try
     guidata(gcbo, handles);
     while ballsScored < pointsPerSimulation
         if ishandle(hwb)
-            endPoint = pointsPerSimulation*numSimulations;
-            progress = (pointsPerSimulation*(simulationNumber-1))+(ballsScored+1);
+            endPoint = pointsPerSimulation*totalSimulations;
+            progress = (pointsPerSimulation*(currentSimulation-1))+(ballsScored);
             percentDone = progress/endPoint;
             waitbar((percentDone), hwb, [num2str(progress), ' / ', num2str(endPoint), ' (', num2str(percentDone*100), '%)']);
         else
