@@ -15,8 +15,8 @@ classdef Ball < Entity
             obj = obj@Entity(handles, 0, 0, handles.ballSize, handles.ballSize, realTime);
             
             %Calculate Initial Ball velocity
-            obj.velocity = struct('x', (rand()*100)+200, 'y', 0);
-            angleRange = [pi/8, pi/3];
+            obj.velocity = struct('x', (rand()*100)+20, 'y', 0);
+            angleRange = [pi/10, pi/4];
             angle = (rand()*(angleRange(2)-angleRange(1)))+angleRange(1);
             horizontalSwitch = rand()*2;
             verticalSwitch = rand()*2;

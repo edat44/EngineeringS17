@@ -36,19 +36,54 @@ classdef Paddle < Entity
         function UpdatePosition(obj, balls)
             y = obj.position.y;
             targetY = obj.position.y;
+            paddleBorders = obj.Borders();
+            ballY = balls{1}.position.y;
             switch obj.strategy
+                case obj.handles.conservative
+                    if ballY < obj.position.y
+                        targetY = paddleBorders.bottom+25;
+                    elseif ballY >= obj.position.y
+                        targetY = paddleBorders.top-25;
+                    end
+                case obj.handles.balanced
+                    if ballY < obj.position.y
+                        targetY = paddleBorders.bottom+20;
+                    elseif ballY >= obj.position.y
+                        targetY = paddleBorders.top-20;
+                    end
+                case obj.handles.offensive
+                    if ballY < obj.position.y
+                        targetY = paddleBorders.bottom+10;
+                    elseif ballY >= obj.position.y
+                        targetY = paddleBorders.top-10;
+                    end
+                case obj.handles.aggressive
+                    if ballY < obj.position.y
+                        targetY = ballY - 25;
+                    elseif ballY >= obj.position.y
+                        targetY = ballY + 25;
+                    end
+                    fprintf('%f\t%f', obj.position.y, targetY);
+                case obj.handles.berserk
+                    if ballY < obj.position.y
+                        targetY = paddleBorders.bottom;
+                    elseif ballY >= obj.position.y
+                        targetY = paddleBorders.top;
+                    end
                 otherwise
                     if length(balls) == 0
                         targetY = 0;
                     else
-                        ballPos = balls{1}.GetPosition();
+                        ballPos = balls{1}.position;
                         targetY = ballPos.y;
                     end
             end
             if targetY < obj.position.y
-                y = max(targetY, obj.position.y - obj.baseSpeed);
+                %y = max(targetY, obj.position.y - obj.baseSpeed);
+                y = obj.position.y - obj.baseSpeed;
             elseif targetY > obj.position.y
-                y = min(targetY, obj.position.y + obj.baseSpeed);
+                %y = min(targetY, obj.position.y + obj.baseSpeed);
+                y = obj.position.y + obj.baseSpeed;
             else
                 y = obj.position.y;
             end    
