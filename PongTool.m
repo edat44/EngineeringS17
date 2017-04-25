@@ -48,13 +48,15 @@ end
 function PongTool_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
-handles.conservative = 1;
-handles.balanced = 2;
-handles.offensive = 3;
-handles.aggressive = 4;
-handles.berserk = 5;
-handles.strategies = handles.strat2popup.String;
-%{'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
+handles.hitting = struct('conservative', 1, 'neutral', 2', 'aggressive', 3);
+handles.hittingNames = handles.hittingPopup.String;
+
+handles.tracking = struct('conservative', 1, 'neutral', 2, 'aggressive', 3);
+handles.trackingNames = handles.trackingPopup.String;
+
+handles.baselineCPU = struct(...
+    'hitting', handles.tracking.conservative,...
+    'tracking', handles.tracking.conservative);
 
 handles.singleBall = 1;
 handles.multiBall3 = 2;
@@ -112,18 +114,19 @@ if ~handles.gameRunning
     pointsPerSimulation = str2double(handles.pointsPerSimulationText.String);
     ballsInPlay = handles.numberofBalls(handles.ballsInPlayPopup.Value);
     realTime = handles.realTimeCheckbox.Value;
-    cpuStrategy = handles.strat1popup.Value;
     hwb = waitbar(0, 'Waiting...');
     hwb.NumberTitle = 'off';
     hwb.Name = 'Simulation Progress';
     
     if handles.runAllStrategiesCheckbox.Value
-        totalSimulations = length(handles.strategies);
-        wins = zeros(1, length(handles.strategies));
+        totalSimulations = length(handles.tracking)*length(handles.hitting);
+        wins = zeros(1, totalSimulations);
         for iStrategyNumber=1:totalSimulations
+            hittingStrat =  rem(iStrategyNumber/length(handles.hitting));
+            trackingStrat = fix(iStrategyNumber/length(handles.hitting));
+            strategy = struct('hitting', hittingStrat, 'tracking', trackingStrat);
             wins(iStrategyNumber) = StartGame(handles,...
-                cpuStrategy,...
-                iStrategyNumber,...
+                strategy,...
                 pointsPerSimulation,...
                 ballsInPlay,...
                 realTime,...
@@ -147,7 +150,7 @@ if ~handles.gameRunning
         end
         
         % Store data from the match
-        matchData.cpuStrategy = cpuStrategy;
+        matchData.cpuStrategy = handles.baselineCPU;
         matchData.ballsInPlay = ballsInPlay;
         matchData.pointsPerSimulation = pointsPerSimulation;
         matchData.wins = wins;
@@ -156,7 +159,6 @@ if ~handles.gameRunning
     else
         strategyNumber = handles.strat2popup.Value;
         wins = StartGame(handles,...
-            cpuStrategy,...
             strategyNumber,...
             pointsPerSimulation,...
             ballsInPlay,...

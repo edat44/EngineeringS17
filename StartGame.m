@@ -1,9 +1,10 @@
-function wins = StartGame(handles, leftStrategy, rightStrategy, pointsPerSimulation, ballsInPlay, realTime, hwb, currentSimulation, totalSimulations)
+function wins = StartGame(handles, rightStrategy, pointsPerSimulation, ballsInPlay, realTime, hwb, currentSimulation, totalSimulations)
 
 
 rng('shuffle');
 
 %% Create both players with correct difficulty and strategy
+leftStrategy = handles.baselineCPU;
 handles.paddles = {Paddle(handles, leftStrategy, handles.leftOffset, -handles.scoreTextX, realTime),...
                 Paddle(handles, rightStrategy, handles.rightOffset, handles.scoreTextX, realTime)};
 paddles = handles.paddles;
@@ -16,7 +17,7 @@ balls = {Ball(handles, realTime)};
 ballsScored = 0;
 
 %% Start simulation
-fprintf('Simulation beginning: ''%s'' Strategy\n', handles.strategies{rightStrategy});
+fprintf('Simulation beginning: ''%s'' & ''%s''\n', handles.hittingNames{rightStrategy.hitting}, handles.trackingNames{rightStrategy.tracking});
 terminated = false;
 try 
     handles.gameRunning = true;
