@@ -37,18 +37,29 @@ classdef Paddle < Entity
             if length(balls) == 0
                 targetY = 0;
             else
-                ballY = balls{1}.position.y;
+                for iball=1:length(balls)
+                    pos = balls{iball}.position;
+                    positions(iball)=[abs(obj.position.x - pos.x); abs(obj.position.y - pos.y)];
+                end
+                if length(balls) == 1
+                    targetB=1;
+                else
+                    switch obj.track
+                        case obj.handles.focused
+                            targetB=1;
+                        case obj.handles.proximity
+                            targetB=1;
+                        case obj.handles.threat
+                            targetB=1;
+                end
+                ballY = balls{targetB}.position.y;
                 yDistanceFromBall = ballY - obj.position.y;
                 switch obj.strategy
                     case obj.handles.conservative
-                        targetY = ballY - 5*sign(yDistanceFromBall);
+                        targetY = ballY;
                     case obj.handles.balanced
-                        targetY = ballY - 20*sign(yDistanceFromBall);
-                    case obj.handles.offensive
-                        targetY = ballY - 10*sign(yDistanceFromBall);
+                        targetY = ballY - 15*sign(yDistanceFromBall);
                     case obj.handles.aggressive
-                        targetY = ballY - 25*sign(yDistanceFromBall);
-                    case obj.handles.berserk
                         targetY = ballY - 30*sign(yDistanceFromBall);
                     otherwise
                         targetY = ballY;
@@ -60,7 +71,7 @@ classdef Paddle < Entity
                 y = targetY;
             else
                 y = obj.position.y + obj.baseSpeed*sign(diffY);
-            end   
+            end
             
             obj.SetPosition(obj.position.x, y);
         end
