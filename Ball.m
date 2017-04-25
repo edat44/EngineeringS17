@@ -79,7 +79,6 @@ classdef Ball < Entity
             obj.SetXVelocityDirection(xDirection)
             posDif = abs(obj.position.y - paddle.GetPosition().y);
             obj.accelerationDamping = obj.accelerationDamping * (1 - (posDif/(paddle.height*2)));
-            disp(obj.accelerationDamping);
             %newAngle = angleAdjustment*(posDif/(obj.handles.paddleHeight/2))*0.5;
             %obj.SetVelocityFromAngle(newAngle + obj.GetAngle());
         end

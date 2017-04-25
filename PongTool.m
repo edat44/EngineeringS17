@@ -135,10 +135,10 @@ if ~handles.gameRunning
             
             % Make a bar chart to show data
             X = handles.strategies;
-            Y = (wins / pointsPerSimulation) * 100;
+            Y = wins;
             bar(handles.analysisAxes, Y);
             handles.analysisAxes.XTickLabel = X;
-            handles.analysisAxes.YLim = [0, 100];
+            handles.analysisAxes.YLim = [0, pointsPerSimulation];
             title(handles.analysisAxes,'Variable AI Wins','FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Percent of Points Won');
@@ -149,7 +149,8 @@ if ~handles.gameRunning
         matchData.ballsInPlay = ballsInPlay;
         matchData.pointsPerSimulation = pointsPerSimulation;
         matchData.wins = wins;
-        %matchData.strategyNames
+        matchData.strategyNames = handles.strategies;
+
     else
         strategyNumber = handles.strat2popup.Value;
         wins = StartGame(handles,...
@@ -162,11 +163,11 @@ if ~handles.gameRunning
             1,...
             1);
         if wins ~= -1
-            X = handles.strategies{strategyNumber};
-            Y = (wins / pointsPerSimulation) * 100;
+            X = handles.strategies;
+            Y = wins;
             bar(handles.analysisAxes, Y);
             handles.analysisAxes.XTickLabel = X;
-            handles.analysisAxes.YLim = [0, 100];
+            handles.analysisAxes.YLim = [0, pointsPerSimulation];
             title(handles.analysisAxes,'Variable AI Wins','FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Percent of Points Won');
