@@ -50,9 +50,7 @@ handles.output = hObject;
 
 handles.conservative = 1;
 handles.balanced = 2;
-handles.offensive = 3;
-handles.aggressive = 4;
-handles.berserk = 5;
+handles.aggressive = 3;
 handles.strategies = handles.trackingPopup.String;
 %{'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
 
