@@ -50,9 +50,9 @@ handles.output = hObject;
 
 handles.conservative = 1;
 handles.balanced = 2;
-handles.aggressive = 3;
-handles.berserk = 4;
-handles.offensive = 5;
+handles.offensive = 3;
+handles.aggressive = 4;
+handles.berserk = 5;
 handles.strategies = handles.strat2popup.String;
 %{'Conservative', 'Balanced', 'Aggressive', 'Berserk'};
 
