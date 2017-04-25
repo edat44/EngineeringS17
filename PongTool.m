@@ -61,6 +61,8 @@ handles.multiBall3 = 2;
 handles.multiBall5 = 3;
 handles.numberofBalls = [1, 3, 5];
 
+handles.multiBallDelay = 1;
+
 handles.leftOffset = -180;
 handles.rightOffset = -handles.leftOffset;
 
@@ -71,7 +73,7 @@ handles.paddleWidth = 10;
 handles.paddleHeight = 60;
 handles.ballSize = 8;
 
-handles.paddleSpeed = 90;
+handles.paddleSpeed = 150;
 handles.ballAccelerationDamping = 50;
 
 handles.quarterSize = struct('width', 200, 'height', 125);

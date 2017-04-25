@@ -21,7 +21,13 @@ terminated = false;
 try 
     handles.gameRunning = true;
     guidata(gcbo, handles);
+    ballStart = tic;
     while ballsScored < pointsPerSimulation
+        if length(balls) < ballsInPlay && toc(ballStart) >= handles.multiBallDelay
+            balls{length(balls)+1} = Ball(handles, realTime);
+            ballStart = tic;
+        end
+        pointStart = tic; %starts timer to check how long loop iteration takes
         if ishandle(hwb)
             endPoint = pointsPerSimulation*totalSimulations;
             progress = (pointsPerSimulation*(currentSimulation-1))+(ballsScored);
@@ -31,7 +37,7 @@ try
             terminated = true;
             break;
         end
-        tic; %starts timer to check how long loop iteration takes
+        
         %% Update Paddles
         for iPaddle=1:length(paddles)
             %Update paddle
@@ -91,7 +97,7 @@ try
         
         %% Finish out loop
         if realTime
-            timeElapsed = toc;
+            timeElapsed = toc(pointStart);
             if timeElapsed > handles.frameLength
                 fprintf(['WARNING! TIME ELAPSED WAS GREATED THAN FRAME DELAY RATE:\n\t',...
                     'time elapsed = %d\n\t',...
