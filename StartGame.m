@@ -51,7 +51,6 @@ try
             if ballBorders.bottom <= leftPaddleBorders.top && ballBorders.top >= leftPaddleBorders.bottom &&...
                     ballBorders.left <= leftPaddleBorders.right && ball.LastBorders().left > leftPaddleBorders.right
         
-                ball.SetXVelocityDirection(1);
                 ball.SetX(leftPaddleBorders.right + ballBorders.width/2);
                 ball.Bounce(paddles{leftPlayer}, 1);
             end
@@ -60,7 +59,6 @@ try
             if ballBorders.bottom <= rightPaddleBorders.top && ballBorders.top >= rightPaddleBorders.bottom &&...
                     ballBorders.right >= rightPaddleBorders.left && ball.LastBorders().right < rightPaddleBorders.left
                
-                ball.SetXVelocityDirection(-1);
                 ball.SetX(rightPaddleBorders.left - ballBorders.width/2);
                 ball.Bounce(paddles{rightPlayer}, -1);
             end

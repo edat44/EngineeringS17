@@ -149,7 +149,7 @@ if ~handles.gameRunning
         matchData.ballsInPlay = ballsInPlay;
         matchData.pointsPerSimulation = pointsPerSimulation;
         matchData.wins = wins;
-        matchData.strategyNames
+        %matchData.strategyNames
     else
         strategyNumber = handles.strat2popup.Value;
         wins = StartGame(handles,...

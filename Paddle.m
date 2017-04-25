@@ -55,7 +55,7 @@ classdef Paddle < Entity
                 end
             end
             diffY = targetY - obj.position.y;
-            disp(diffY);
+            %disp(diffY);
             if abs(diffY) < obj.baseSpeed
                 y = targetY;
             else

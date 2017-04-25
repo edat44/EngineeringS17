@@ -75,9 +75,12 @@ classdef Ball < Entity
             angle = abs(atan(obj.velocity.y/obj.velocity.x));
         end
         
-        function Bounce(obj, paddle, angleAdjustment)
-            posDif = obj.position.y - paddle.GetPosition().y;
-            newAngle = angleAdjustment*(posDif/(obj.handles.paddleHeight/2))*0.5;
+        function Bounce(obj, paddle, xDirection)
+            obj.SetXVelocityDirection(xDirection)
+            posDif = abs(obj.position.y - paddle.GetPosition().y);
+            obj.accelerationDamping = obj.accelerationDamping * (1 - (posDif/(paddle.height*2)));
+            disp(obj.accelerationDamping);
+            %newAngle = angleAdjustment*(posDif/(obj.handles.paddleHeight/2))*0.5;
             %obj.SetVelocityFromAngle(newAngle + obj.GetAngle());
         end
         
