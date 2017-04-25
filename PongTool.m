@@ -143,7 +143,7 @@ if ~handles.gameRunning
             handles.analysisAxes.YLim = [0, pointsPerSimulation];
             title(handles.analysisAxes,'Variable AI Wins','FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
-            ylabel(handles.analysisAxes,'Percent of Points Won');
+            ylabel(handles.analysisAxes,'Number of Points Won');
         end
         
         % Store data from the match
@@ -172,7 +172,7 @@ if ~handles.gameRunning
             handles.analysisAxes.YLim = [0, pointsPerSimulation];
             title(handles.analysisAxes,'Variable AI Wins','FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
-            ylabel(handles.analysisAxes,'Percent of Points Won');
+            ylabel(handles.analysisAxes,'Number of Points Won');
         end
     end
     
