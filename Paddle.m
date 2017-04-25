@@ -39,27 +39,28 @@ classdef Paddle < Entity
             else
                 for iball=1:length(balls)
                     pos = balls{iball}.position;
-                    positions(iball)=[abs(obj.position.x - pos.x); abs(obj.position.y - pos.y)];
+                    positions(iball,:)=[abs(obj.position.x - pos.x); abs(obj.position.y - pos.y)];
                 end
                 if length(balls) == 1
                     targetB=1;
                 else
                     switch obj.track
-                        case obj.handles.focused
+                        case obj.handles.tracking.focused
                             targetB=1;
-                        case obj.handles.proximity
+                        case obj.handles.tracking.proximity
                             targetB=1;
-                        case obj.handles.threat
+                        case obj.handles.tracking.threat
                             targetB=1;
+                    end
                 end
                 ballY = balls{targetB}.position.y;
                 yDistanceFromBall = ballY - obj.position.y;
-                switch obj.strategy
-                    case obj.handles.conservative
+                switch obj.strategy.hitting
+                    case obj.handles.hitting.conservative
                         targetY = ballY;
-                    case obj.handles.balanced
+                    case obj.handles.hitting.balanced
                         targetY = ballY - 15*sign(yDistanceFromBall);
-                    case obj.handles.aggressive
+                    case obj.handles.hitting.aggressive
                         targetY = ballY - 30*sign(yDistanceFromBall);
                     otherwise
                         targetY = ballY;

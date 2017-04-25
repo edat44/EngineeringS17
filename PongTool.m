@@ -51,12 +51,12 @@ handles.output = hObject;
 handles.hitting = struct('conservative', 1, 'neutral', 2', 'aggressive', 3);
 handles.hittingNames = handles.hittingPopup.String;
 
-handles.tracking = struct('conservative', 1, 'neutral', 2, 'aggressive', 3);
+handles.tracking = struct('focused', 1, 'proximity', 2, 'threat', 3);
 handles.trackingNames = handles.trackingPopup.String;
 
 handles.baselineCPU = struct(...
-    'hitting', handles.tracking.conservative,...
-    'tracking', handles.tracking.conservative);
+    'hitting', handles.hitting.conservative,...
+    'tracking', handles.tracking.focused);
 
 handles.singleBall = 1;
 handles.multiBall3 = 2;
@@ -121,10 +121,14 @@ if ~handles.gameRunning
     if handles.runAllStrategiesCheckbox.Value
         totalSimulations = length(handles.tracking)*length(handles.hitting);
         wins = zeros(1, totalSimulations);
+        strategyNames = zeros(1, totalSimulations);
         for iStrategyNumber=1:totalSimulations
             hittingStrat =  rem(iStrategyNumber/length(handles.hitting));
             trackingStrat = fix(iStrategyNumber/length(handles.hitting));
             strategy = struct('hitting', hittingStrat, 'tracking', trackingStrat);
+            strategyNames(iStrategyNumber) =...
+                ['Tracking: ', handles.trackingNames{trackingStrat}, ' ',...
+                'Hitting: ', handles.hittingNames{hittingStrat}];
             wins(iStrategyNumber) = StartGame(handles,...
                 strategy,...
                 pointsPerSimulation,...
@@ -139,7 +143,7 @@ if ~handles.gameRunning
             
             
             % Make a bar chart to show data
-            X = handles.strategies;
+            X = strategyNames;
             Y = wins;
             bar(handles.analysisAxes, Y);
             handles.analysisAxes.XTickLabel = X;
@@ -154,12 +158,12 @@ if ~handles.gameRunning
         matchData.ballsInPlay = ballsInPlay;
         matchData.pointsPerSimulation = pointsPerSimulation;
         matchData.wins = wins;
-        matchData.strategyNames = handles.strategies;
+        matchData.strategyNames = strategyNames;
 
     else
-        strategyNumber = handles.trackingPopup.Value;
+        strategy = struct('tracking', handles.trackingPopup.Value, 'hitting', handles.hittingPopup.Value);
         wins = StartGame(handles,...
-            strategyNumber,...
+            strategy,...
             pointsPerSimulation,...
             ballsInPlay,...
             realTime,...
