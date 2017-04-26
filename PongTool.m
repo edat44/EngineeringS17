@@ -63,7 +63,7 @@ handles.multiBall3 = 2;
 handles.multiBall5 = 3;
 handles.numberofBalls = [1, 3, 5];
 
-handles.multiBallDelay = 1;
+handles.multiBallDelay = 1.25;
 
 handles.leftOffset = -180;
 handles.rightOffset = -handles.leftOffset;
