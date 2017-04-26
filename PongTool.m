@@ -121,7 +121,7 @@ if ~handles.gameRunning
     if handles.runAllStrategiesCheckbox.Value
         numTrackingStrategies = numel(fieldnames(handles.tracking));
         numHittingStrategies = numel(fieldnames(handles.hitting));
-        totalSimulations = numTrackingStrategies*numHittingStrategies
+        totalSimulations = numTrackingStrategies*numHittingStrategies;
         wins = zeros(1, totalSimulations);
         for i=1:totalSimulations
             strategyNames{i} = '';
@@ -149,7 +149,8 @@ if ~handles.gameRunning
             % Make a bar chart to show data
             X = strategyNames;
             Y = wins;
-            bar(handles.analysisAxes, Y/pointsPerSimulation*100);
+            percentageY = Y/pointsPerSimulation*100;
+            bar(handles.analysisAxes, percentageY);
             handles.analysisAxes.XTickLabelRotation	= 45;
             handles.analysisAxes.XTickLabel = X;
             handles.analysisAxes.YLim = [0, 110];
@@ -158,6 +159,11 @@ if ~handles.gameRunning
             title(handles.analysisAxes, plotTitle,'FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Percentage Points Won');
+            
+            labels = num2cell(percentageY);
+            text(handles.analysisAxes, 1:iStrategyNumber, percentageY(1:iStrategyNumber),...
+                labels(1:iStrategyNumber),...
+                'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'center', 'FontSize', 12, 'Color', 'Black');
         end
         
         % Store data from the match
