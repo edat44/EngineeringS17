@@ -77,20 +77,20 @@ classdef Paddle < Entity
                             end
                     end
                 end
-                    ballY = balls{targetB}.position.y;
-                    yDistanceFromBall = ballY - obj.position.y;
-                    switch obj.strategy.hitting
-                        case obj.handles.hitting.conservative
-                            targetY = ballY;
-                        case obj.handles.hitting.balanced
-                            targetY = ballY - 15*sign(yDistanceFromBall);
-                        case obj.handles.hitting.aggressive
-                            targetY = ballY - 30*sign(yDistanceFromBall);
-                        otherwise
-                            targetY = ballY;
-                    end
+                ballY = balls{targetB}.position.y;
+                yDistanceFromBall = ballY - obj.position.y;
+                switch obj.strategy.hitting
+                    case obj.handles.hitting.conservative
+                        targetY = ballY;
+                    case obj.handles.hitting.balanced
+                        targetY = ballY - 15*sign(yDistanceFromBall);
+                    case obj.handles.hitting.aggressive
+                        targetY = ballY - 30*sign(yDistanceFromBall);
+                    otherwise
+                        targetY = ballY;
                 end
-                obj.ballTrack=targetB;
+            end
+            obj.ballTrack=targetB;
             diffY = targetY - obj.position.y;
             %disp(diffY);
             if abs(diffY) < obj.baseSpeed

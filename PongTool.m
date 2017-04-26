@@ -149,8 +149,8 @@ if ~handles.gameRunning
             % Make a bar chart to show data
             X = strategyNames;
             Y = wins;
-            percentageY = Y/pointsPerSimulation*100;
-            bar(handles.analysisAxes, percentageY);
+            yPercentage = Y/pointsPerSimulation*100;
+            bar(handles.analysisAxes, yPercentage);
             handles.analysisAxes.XTickLabelRotation	= 45;
             handles.analysisAxes.XTickLabel = X;
             handles.analysisAxes.YLim = [0, 110];
@@ -160,8 +160,8 @@ if ~handles.gameRunning
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Percentage Points Won');
             
-            labels = num2cell(percentageY);
-            text(handles.analysisAxes, 1:iStrategyNumber, percentageY(1:iStrategyNumber),...
+            labels = num2cell(yPercentage);
+            text(handles.analysisAxes, 1:iStrategyNumber, yPercentage(1:iStrategyNumber),...
                 labels(1:iStrategyNumber),...
                 'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'center', 'FontSize', 12, 'Color', 'Black');
         end
@@ -189,7 +189,8 @@ if ~handles.gameRunning
         if wins ~= -1
             X = strategyName;
             Y = wins;
-            bar(handles.analysisAxes, Y/pointsPerSimulation*100);
+            yPercentage = Y/pointsPerSimulation*100;
+            bar(handles.analysisAxes, yPercentage);
             handles.analysisAxes.XTickLabel = X;
             handles.analysisAxes.YLim = [0, 110];
             handles.analysisAxes.YTick = 0:10:100;
@@ -197,6 +198,10 @@ if ~handles.gameRunning
             title(handles.analysisAxes, plotTitle,'FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Number of Points Won');
+            
+            labels = num2cell(yPercentage);
+            text(handles.analysisAxes, 1, yPercentage, labels,...
+                'VerticalAlignment', 'bottom', 'HorizontalAlignment', 'center', 'FontSize', 12, 'Color', 'Black');
         end
     end
     
