@@ -93,6 +93,10 @@ classdef Paddle < Entity
                 obj.UpdateScoreDisplay();
             end
         end
+                
+        function closer = BallGettingCloser(obj, ball)
+            closer = abs(ball.position.x-obj.position.x) < abs(ball.lastPosition.x-obj.position.x);
+        end
         
         function delete(obj)
             delete@Entity(obj);
