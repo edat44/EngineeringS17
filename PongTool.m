@@ -149,14 +149,15 @@ if ~handles.gameRunning
             % Make a bar chart to show data
             X = strategyNames;
             Y = wins;
-            bar(handles.analysisAxes, Y);
+            bar(handles.analysisAxes, Y/pointsPerSimulation*100);
             handles.analysisAxes.XTickLabelRotation	= 45;
             handles.analysisAxes.XTickLabel = X;
-            handles.analysisAxes.YLim = [0, pointsPerSimulation];
+            handles.analysisAxes.YLim = [0, 110];
+            handles.analysisAxes.YTick = 0:10:100;
             plotTitle = sprintf('Balls in Play: %.0f, Points per Simulation: %.0f', ballsInPlay, pointsPerSimulation);
             title(handles.analysisAxes, plotTitle,'FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
-            ylabel(handles.analysisAxes,'Number of Points Won');
+            ylabel(handles.analysisAxes,'Percentage Points Won');
         end
         
         % Store data from the match
@@ -182,10 +183,12 @@ if ~handles.gameRunning
         if wins ~= -1
             X = strategyName;
             Y = wins;
-            bar(handles.analysisAxes, Y);
+            bar(handles.analysisAxes, Y/pointsPerSimulation*100);
             handles.analysisAxes.XTickLabel = X;
-            handles.analysisAxes.YLim = [0, pointsPerSimulation];
-            title(handles.analysisAxes,'Variable AI Wins','FontSize',15);
+            handles.analysisAxes.YLim = [0, 110];
+            handles.analysisAxes.YTick = 0:10:100;
+            plotTitle = sprintf('Balls in Play: %.0f, Points per Simulation: %.0f', ballsInPlay, pointsPerSimulation);
+            title(handles.analysisAxes, plotTitle,'FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Number of Points Won');
         end
