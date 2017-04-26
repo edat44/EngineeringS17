@@ -153,17 +153,18 @@ if ~handles.gameRunning
             handles.analysisAxes.XTickLabelRotation	= 45;
             handles.analysisAxes.XTickLabel = X;
             handles.analysisAxes.YLim = [0, pointsPerSimulation];
-            title(handles.analysisAxes,'Variable AI Wins','FontSize',15);
+            plotTitle = sprintf('Balls in Play: %.0f, Points per Simulation: %.0f', ballsInPlay, pointsPerSimulation);
+            title(handles.analysisAxes, plotTitle,'FontSize',15);
             xlabel(handles.analysisAxes,'Strategy Type');
             ylabel(handles.analysisAxes,'Number of Points Won');
         end
         
         % Store data from the match
-        matchData.cpuStrategy = handles.baselineCPU;
-        matchData.ballsInPlay = ballsInPlay;
-        matchData.pointsPerSimulation = pointsPerSimulation;
-        matchData.wins = wins;
-        matchData.strategyNames = strategyNames;
+        %matchData.cpuStrategy = handles.baselineCPU;
+        %matchData.ballsInPlay = ballsInPlay;
+        %matchData.pointsPerSimulation = pointsPerSimulation;
+        %matchData.wins = wins;
+        %matchData.strategyNames = strategyNames;
 
     else
         strategy = struct('tracking', handles.trackingPopup.Value, 'hitting', handles.hittingPopup.Value);
@@ -229,7 +230,7 @@ if hObject.Value
     handles.hittingPopup.Enable = 'off';
 else
     handles.trackingPopup.Enable = 'on';
-    handles.hittingPopup.Enable = 'off';
+    handles.hittingPopup.Enable = 'on';
 end
 
 function disableControls(handles)
