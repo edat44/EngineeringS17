@@ -40,14 +40,14 @@ classdef Ball < Entity
             %Use Verlet method to calculate new position and velocity
             %vhalfx = obj.velocity.x + abs(obj.velocity.x)/(obj.accelerationDamping*cos(angle))*(deltat/2)*sign(obj.velocity.x);
             %vhalfy = obj.velocity.y + abs(obj.velocity.y)/(obj.accelerationDamping*sin(angle))*(deltat/2)*sign(obj.velocity.y);
-            vhalfx = obj.velocity.x + obj.velocity.x/(obj.accelerationDamping*cos(angle))*(deltat/2);
-            vhalfy = obj.velocity.y + obj.velocity.y/(obj.accelerationDamping*sin(angle))*(deltat/2);
+            vhalfx = obj.velocity.x + abs(obj.velocity.x)/(obj.accelerationDamping*cos(angle))*(deltat/2)*sign(obj.velocity.x);
+            vhalfy = obj.velocity.y + abs(obj.velocity.y)/(obj.accelerationDamping*sin(angle))*(deltat/2)*sign(obj.velocity.y);
             
             x = obj.position.x + (vhalfx*deltat);
             y = obj.position.y + (vhalfy*deltat);
             
-            obj.velocity.x = vhalfx + vhalfx/(obj.accelerationDamping*cos(angle))*(deltat/2)*vhalfx;
-            obj.velocity.y = vhalfy + vhalfy/(obj.accelerationDamping*sin(angle))*(deltat/2)*vhalfy;
+            obj.velocity.x = vhalfx + abs(vhalfx)/(obj.accelerationDamping*cos(angle))*(deltat/2)*sign(vhalfx);
+            obj.velocity.y = vhalfy + abs(vhalfy)/(obj.accelerationDamping*sin(angle))*(deltat/2)*sign(vhalfy);
             
             yLimit = obj.handles.quarterSize.height - obj.height/2;
             if abs(y) > yLimit
