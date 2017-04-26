@@ -105,6 +105,10 @@ classdef Ball < Entity
             obj.velocity.x = abs(obj.velocity.x) * sign(direction);
         end
         
+        function closer = BallGettingCloser(obj, ball)
+            closer = abs(ball.position.x-obj.position.x) < abs(ball.lastPosition.x-obj.position.x);
+        end
+        
         function delete(obj)
             delete(obj.pointPlot);
             delete@Entity(obj);
