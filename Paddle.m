@@ -44,7 +44,7 @@ classdef Paddle < Entity
                 if length(balls) == 1
                     targetB=1;
                 else
-                    switch obj.track
+                    switch obj.strategy.tracking
                         case obj.handles.tracking.focused
                             targetB=1;
                         case obj.handles.tracking.proximity

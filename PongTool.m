@@ -22,7 +22,7 @@ function varargout = PongTool(varargin)
 
 % Edit the above text to modify the response to help PongTool
 
-% Last Modified by GUIDE v2.5 25-Apr-2017 13:26:49
+% Last Modified by GUIDE v2.5 25-Apr-2017 20:50:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -48,7 +48,7 @@ end
 function PongTool_OpeningFcn(hObject, eventdata, handles, varargin)
 handles.output = hObject;
 
-handles.hitting = struct('conservative', 1, 'neutral', 2', 'aggressive', 3);
+handles.hitting = struct('conservative', 1, 'balanced', 2', 'aggressive', 3);
 handles.hittingNames = handles.hittingPopup.String;
 
 handles.tracking = struct('focused', 1, 'proximity', 2, 'threat', 3);
@@ -119,16 +119,20 @@ if ~handles.gameRunning
     hwb.Name = 'Simulation Progress';
     
     if handles.runAllStrategiesCheckbox.Value
-        totalSimulations = length(handles.tracking)*length(handles.hitting);
+        numTrackingStrategies = numel(fieldnames(handles.tracking));
+        numHittingStrategies = numel(fieldnames(handles.hitting));
+        totalSimulations = numTrackingStrategies*numHittingStrategies
         wins = zeros(1, totalSimulations);
-        strategyNames = zeros(1, totalSimulations);
+        for i=1:totalSimulations
+            strategyNames{i} = '';
+        end
         for iStrategyNumber=1:totalSimulations
-            hittingStrat =  rem(iStrategyNumber/length(handles.hitting));
-            trackingStrat = fix(iStrategyNumber/length(handles.hitting));
+            hittingStrat =  rem(iStrategyNumber-1, numHittingStrategies)+1;
+            trackingStrat = fix((iStrategyNumber-1)/numHittingStrategies)+1;
             strategy = struct('hitting', hittingStrat, 'tracking', trackingStrat);
-            strategyNames(iStrategyNumber) =...
-                ['Tracking: ', handles.trackingNames{trackingStrat}, ' ',...
-                'Hitting: ', handles.hittingNames{hittingStrat}];
+            strategyNames{iStrategyNumber} = sprintf('%s & %s',...
+                handles.hittingNames{hittingStrat},...
+                handles.trackingNames{trackingStrat});
             wins(iStrategyNumber) = StartGame(handles,...
                 strategy,...
                 pointsPerSimulation,...
@@ -146,6 +150,7 @@ if ~handles.gameRunning
             X = strategyNames;
             Y = wins;
             bar(handles.analysisAxes, Y);
+            handles.analysisAxes.XTickLabelRotation	= 45;
             handles.analysisAxes.XTickLabel = X;
             handles.analysisAxes.YLim = [0, pointsPerSimulation];
             title(handles.analysisAxes,'Variable AI Wins','FontSize',15);
@@ -162,6 +167,9 @@ if ~handles.gameRunning
 
     else
         strategy = struct('tracking', handles.trackingPopup.Value, 'hitting', handles.hittingPopup.Value);
+        strategyName = sprintf('%s & %s',...
+            handles.trackingNames{strategy.tracking},...
+            handles.hittingNames{strategy.hitting});
         wins = StartGame(handles,...
             strategy,...
             pointsPerSimulation,...
@@ -171,7 +179,7 @@ if ~handles.gameRunning
             1,...
             1);
         if wins ~= -1
-            X = handles.strategies;
+            X = strategyName;
             Y = wins;
             bar(handles.analysisAxes, Y);
             handles.analysisAxes.XTickLabel = X;
@@ -218,14 +226,17 @@ guidata(hObject, handles);
 function runAllStrategiesCheckbox_Callback(hObject, eventdata, handles)
 if hObject.Value
     handles.trackingPopup.Enable = 'off';
+    handles.hittingPopup.Enable = 'off';
 else
     handles.trackingPopup.Enable = 'on';
+    handles.hittingPopup.Enable = 'off';
 end
 
 function disableControls(handles)
 handles.startButton.Enable = 'off';
 handles.strat1popup.Enable = 'off';
 handles.trackingPopup.Enable = 'off';
+handles.hittingPopup.Enable = 'off';
 handles.ballsInPlayPopup.Enable = 'off';
 handles.pointsPerSimulationText.Enable = 'off';
 handles.realTimeCheckbox.Enable = 'off';
@@ -241,30 +252,9 @@ handles.runAllStrategiesCheckbox.Enable = 'on';
 handles.realTimeCheckbox.Enable = 'on';
 if handles.runAllStrategiesCheckbox.Value
     handles.trackingPopup.Enable = 'off';
+    handles.hittingPopup.Enable = 'off';
 else
     handles.trackingPopup.Enable = 'on';
+    handles.hittingPopup.Enable = 'on';
 end
 guidata(gcbo, handles);
-
-
-% --- Executes on selection change in hittingPopup.
-function hittingPopup_Callback(hObject, eventdata, handles)
-% hObject    handle to hittingPopup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    structure with handles and user data (see GUIDATA)
-
-% Hints: contents = cellstr(get(hObject,'String')) returns hittingPopup contents as cell array
-%        contents{get(hObject,'Value')} returns selected item from hittingPopup
-
-
-% --- Executes during object creation, after setting all properties.
-function hittingPopup_CreateFcn(hObject, eventdata, handles)
-% hObject    handle to hittingPopup (see GCBO)
-% eventdata  reserved - to be defined in a future version of MATLAB
-% handles    empty - handles not created until after all CreateFcns called
-
-% Hint: popupmenu controls usually have a white background on Windows.
-%       See ISPC and COMPUTER.
-if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
-    set(hObject,'BackgroundColor','white');
-end
