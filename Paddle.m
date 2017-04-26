@@ -49,19 +49,34 @@ classdef Paddle < Entity
                     targetB=obj.ballTrack;
                     switch obj.strategy.tracking
                         case obj.handles.tracking.focused
-                            if abs(balls{targetB}.position.x-obj.position) > abs(balls{targetB}.lastPosition.x-obj.lastPosition)
+                            if ~obj.BallGettingCloser(balls{targetB})
                                 for jball=1:length(balls)
-                                  if abs(balls{jball}.position.x-obj.position) < abs(balls{jball}.lastPosition.x-obj.lastPosition)
-                                      targetB=jball;
-                                  end
+                                    if obj.BallGettingCloser(balls{jball})
+                                        targetB=jball;
+                                        break;
+                                    end
                                 end
                             end
                         case obj.handles.tracking.proximity
-                                    targetB=1;
+                            xClosest=obj.handles.quarterSize.width*2;
+                            for jball=1:length(balls)
+                                [closer, xDist] = obj.BallGettingCloser(balls{jball});
+                                if closer && xDist < xClosest
+                                    targetB=jball;
+                                    xClosest = xDist;
+                                end
+                            end
                         case obj.handles.tracking.threat
-                                        targetB=1;
+                            vHighest=0;
+                            for jball=1:length(balls)
+                                closer=obj.BallGettingCloser(balls{jball});
+                                if closer && balls{jball}.velocity.x > vHighest
+                                    vHighest=balls{jball}.velocity.x;
+                                    targetB=jball;
+                                end
                             end
                     end
+                end
                     ballY = balls{targetB}.position.y;
                     yDistanceFromBall = ballY - obj.position.y;
                     switch obj.strategy.hitting
@@ -94,8 +109,10 @@ classdef Paddle < Entity
             end
         end
                 
-        function closer = BallGettingCloser(obj, ball)
-            closer = abs(ball.position.x-obj.position.x) < abs(ball.lastPosition.x-obj.position.x);
+        function [closer, currentXDist] = BallGettingCloser(obj, ball)
+            currentXDist = abs(ball.position.x-obj.position.x);
+            closer = currentXDist < abs(ball.lastPosition.x-obj.position.x);
+        
         end
         
         function delete(obj)
